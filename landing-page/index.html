@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>vigiAI — Monitoramento do Diário Oficial de Santos</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="top"><div class="wrap"><div class="logo">📄 vigi<span>AI</span></div><a class="btn site-link" href="#cadastro">Começar agora</a></div></header>
+
+<main>
+<section><div class="wrap hero">
+  <div>
+    <h1>Pare de procurar. Nós monitoramos por você.</h1>
+    <p class="muted hero-intro">Informe seus dados, escolha o que deseja acompanhar e receba um alerta quando uma publicação relacionada aparecer no Diário Oficial de Santos.</p>
+    <div class="cta-row"><a class="btn" href="#cadastro">Começar agora</a><a class="btn ghost" href="#planos">Conhecer os planos</a></div>
+    <p class="muted sans hero-note">Serviço independente, sem vínculo com a Prefeitura de Santos. Não garantimos a detecção de 100% das publicações.</p>
+  </div>
+  <div class="flow" aria-label="Fluxo do serviço">
+    <div class="node"><b>SEUS DADOS</b>Nome · CPF · Nascimento · Nº de inscrição</div><div class="arrow">↓</div>
+    <div class="node hl"><b>MONITORAMENTO AUTOMÁTICO</b>Sem consultas diárias da sua parte</div><div class="arrow">↓</div>
+    <div class="node"><b>DIÁRIO OFICIAL DE SANTOS</b>Novas edições verificadas</div><div class="arrow">↓</div>
+    <div class="node"><b>PUBLICAÇÃO ENCONTRADA</b>Ocorrência registrada</div><div class="arrow">↓</div>
+    <div class="node hl"><b>NOTIFICAÇÃO</b>Nos canais do seu plano</div>
+  </div>
+</div></section>
+
+<section class="surface"><div class="wrap">
+  <h2>Como funciona</h2><p class="muted">Cadastre uma vez. O sistema faz o resto.</p>
+  <div class="grid4">
+    <div class="card"><div class="num">01</div><h3>Cadastre seus dados</h3><p class="muted">Informe nome, CPF, data de nascimento e número de inscrição.</p></div>
+    <div class="card"><div class="num">02</div><h3>Escolha o que acompanhar</h3><p class="muted">Cadastre o processo, concurso ou edital que deseja monitorar.</p></div>
+    <div class="card"><div class="num">03</div><h3>Escolha onde receber</h3><p class="muted">Selecione seus canais de comunicação de acordo com seu plano.</p></div>
+    <div class="card"><div class="num">04</div><h3>Nós monitoramos</h3><p class="muted">O sistema consulta as novas publicações e avisa quando encontrar uma ocorrência relacionada ao seu monitoramento.</p></div>
+  </div>
+  <div class="alert-wrap">
+    <div class="card alert sans">
+      <b>🔔 NOVA PUBLICAÇÃO ENCONTRADA</b>
+      <p class="muted alert-copy">Encontramos uma publicação relacionada ao seu monitoramento.</p>
+      <div class="k">Processo</div><div>Concurso Público X</div>
+      <div class="k">Inscrição</div><div>123456</div>
+      <div class="k">Tipo</div><div>Convocação</div>
+      <div class="k">Edição</div><div>12.345</div>
+      <div class="btn">Ver publicação</div>
+    </div>
+    <div class="alert-description"><h3>Um monitoramento = um processo</h3><p class="muted"><b>Cada monitoramento representa um processo, concurso ou edital que você deseja acompanhar.</b> O alerta prioriza o número de inscrição e os dados do processo; CPF e data de nascimento não aparecem nas notificações.</p></div>
+  </div>
+</div></section>
+
+<section id="planos"><div class="wrap">
+  <h2>Planos mensais</h2>
+  <p class="muted">Todos os canais estão disponíveis na plataforma, mas a quantidade que pode ser utilizada simultaneamente depende do plano.</p>
+  <div class="plans" id="planCards"></div>
+  <div class="tbl card card--table"><table id="planTable"></table></div>
+</div></section>
+
+<section id="cadastro" class="surface"><div class="wrap form-wrap">
+  <h2>Começar monitoramento</h2>
+  <div class="steps" id="steps"></div>
+  <div class="card stage" id="stage"></div>
+  <p class="muted sans form-copy">🔒 Seus dados são utilizados para identificar seus monitoramentos e enviar os alertas configurados. <a href="#">Política de Privacidade</a> · <a href="#">Termos de Uso</a></p>
+</div></section>
+</main>
+
+<footer class="footer"><div class="wrap">O vigiAI é um serviço independente e não pertence nem é afiliado à Prefeitura de Santos. A detecção depende do conteúdo publicado e não é garantida em 100% dos casos.</div></footer>
+
+<script src="agent-contract.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
