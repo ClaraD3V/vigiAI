@@ -123,6 +123,20 @@ section.surface {
   font-size: 1rem;
   cursor: pointer;
   text-decoration: none;
+  transition: transform 160ms ease, filter 160ms ease, border-color 160ms ease;
+}
+
+.btn:hover {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+}
+
+.btn:focus-visible,
+.auth-tab:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--accent) 55%, transparent);
+  outline-offset: 3px;
 }
 
 .btn.ghost {
@@ -518,6 +532,10 @@ input:focus {
   grid-template-columns: minmax(0, 0.9fr) minmax(320px, 0.7fr);
   gap: 48px;
   align-items: center;
+}
+
+.auth-shell--single {
+  max-width: 560px;
 }
 
 .auth-hero h1 {
