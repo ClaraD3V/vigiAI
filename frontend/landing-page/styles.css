@@ -535,7 +535,13 @@ input:focus {
 }
 
 .auth-shell--single {
+  display: block;
   max-width: 560px;
+  width: 100%;
+}
+
+.auth-shell--single .auth-card {
+  width: 100%;
 }
 
 .auth-hero h1 {

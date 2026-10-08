@@ -11,7 +11,7 @@
   }
 
   async function initialize() {
-    const client = globalThis.vigiAISupabase.client;
+    const client = globalThis.vigiAISupabase && globalThis.vigiAISupabase.client;
     if (!client) {
       show("A redefinição ainda não está configurada. Defina VIGIAI_SUPABASE com a URL e a chave pública do projeto.", "error");
       return;

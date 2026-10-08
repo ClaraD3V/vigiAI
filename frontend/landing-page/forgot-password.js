@@ -18,7 +18,7 @@
       return;
     }
     document.querySelector('[data-error="email"]').textContent = "";
-    const client = globalThis.vigiAISupabase.client;
+    const client = globalThis.vigiAISupabase && globalThis.vigiAISupabase.client;
     if (!client) {
       show("A recuperação ainda não está configurada. Defina VIGIAI_SUPABASE com a URL e a chave pública do projeto.", "error");
       return;
