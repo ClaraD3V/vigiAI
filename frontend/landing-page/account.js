@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  const AUTH_API_URL = "";
+  const authClient = globalThis.vigiAISupabase && globalThis.vigiAISupabase.client;
   const loginForm = document.querySelector("#loginForm");
   const signupForm = document.querySelector("#signupForm");
   const authMessage = document.querySelector("#authMessage");
@@ -113,24 +113,22 @@
   async function login(event) {
     event.preventDefault();
     const { valid, values } = validateLogin(loginForm);
-    if (!valid || !AUTH_API_URL) {
-      if (!valid) return;
-      showMessage("A autenticação ainda não está conectada a um backend seguro. Configure AUTH_API_URL para acessar a conta.", "error");
+    if (!valid) return;
+    if (!authClient) {
+      showMessage("A autenticação ainda não está configurada. Defina VIGIAI_SUPABASE com a URL e a chave pública do projeto.", "error");
       return;
     }
 
     showMessage("Autenticando…", "info");
 
     try {
-      const response = await fetch(AUTH_API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "login", ...values })
+      const { error } = await authClient.auth.signInWithPassword({
+        email: values.email,
+        password: values.password
       });
-
-      if (!response.ok) throw new Error();
+      if (error) throw error;
       showMessage("Login realizado. Você será redirecionado para sua conta.", "ok");
-      window.setTimeout(() => window.location.assign("index.html"), 1200);
+      window.setTimeout(() => window.location.assign("index.html"), 700);
     } catch {
       showMessage("E-mail ou senha inválidos. Tente novamente ou crie uma conta.", "error");
     }
@@ -141,22 +139,27 @@
     const { valid, values } = validateSignup(signupForm);
     if (!valid) return;
 
-    if (!AUTH_API_URL) {
-      showMessage("O cadastro ainda não está conectado a um backend. Configure AUTH_API_URL para criar a conta.", "error");
+    if (!authClient) {
+      showMessage("O cadastro ainda não está configurado. Defina VIGIAI_SUPABASE com a URL e a chave pública do projeto.", "error");
       return;
     }
 
     showMessage("Criando sua conta…", "info");
 
     try {
-      const response = await fetch(AUTH_API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "signup", registration: buildAccountRegistration(values) })
+      const registration = buildAccountRegistration(values);
+      const { data, error } = await authClient.auth.signUp({
+        email: registration.email,
+        password: registration.password,
+        options: {
+          data: { full_name: registration.full_name },
+          emailRedirectTo: new URL("account.html", window.location.href).href
+        }
       });
-
-      if (!response.ok) throw new Error();
-      showMessage("Conta criada com sucesso! Faça login para continuar.", "ok");
+      if (error) throw error;
+      showMessage(data.session
+        ? "Conta criada com sucesso! Você será redirecionado."
+        : "Conta criada. Verifique seu e-mail para confirmar o cadastro.", "ok");
       setActiveTab("login");
       signupForm.reset();
     } catch {
