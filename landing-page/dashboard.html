@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Radar do Edital | Área do cliente</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="account-page">
+  <header class="top">
+    <div class="wrap">
+      <div class="logo">📄 vigi<span>AI</span></div>
+      <div class="top-actions">
+        <a class="btn site-link ghost" href="index.html">Página inicial</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="client-layout wrap">
+    <aside class="client-sidebar" aria-label="Menu da conta">
+      <div class="sidebar-brand">
+        <div class="logo">📄 vigi<span>AI</span></div>
+        <p class="eyebrow">Radar do Edital</p>
+      </div>
+
+      <nav class="nav-stack" aria-label="Navegação da área do cliente">
+        <button type="button" class="nav-tab is-active" data-client-tab="subscription" aria-selected="true">Gerenciar assinatura</button>
+        <button type="button" class="nav-tab" data-client-tab="monitoring" aria-selected="false">Gerenciar monitoramentos</button>
+      </nav>
+
+      <div class="sidebar-status">
+        <span class="status-badge status-badge--success">Modo demonstração</span>
+        <small>Dados fictícios para preview da experiência do cliente.</small>
+      </div>
+    </aside>
+
+    <section class="client-content" aria-live="polite">
+      <header class="client-topbar">
+        <div>
+          <p class="eyebrow">Área do cliente</p>
+          <h1>Radar do Edital</h1>
+        </div>
+        <div class="topbar-actions">
+          <a class="btn ghost btn--small" href="account.html">Voltar ao login</a>
+        </div>
+      </header>
+
+      <div id="subscriptionPanel" class="tab-panel is-active" aria-label="Gerenciar assinatura"></div>
+      <div id="monitoringPanel" class="tab-panel" aria-label="Gerenciar monitoramentos" hidden></div>
+    </section>
+  </main>
+
+  <div id="modalBackdrop" class="modal-backdrop" hidden>
+    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-header">
+        <h2 id="modalTitle">Detalhes</h2>
+        <button type="button" class="modal-close" id="closeModalBtn" aria-label="Fechar modal">×</button>
+      </div>
+      <div id="modalBody" class="modal-body"></div>
+    </div>
+  </div>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>
