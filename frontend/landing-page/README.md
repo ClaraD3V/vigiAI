@@ -13,6 +13,11 @@ globalThis.VIGIAI_SUPABASE = {
 O arquivo `supabase-config.example.js` pode ser usado como modelo. Apenas a URL e a chave
 anon/publishable são permitidas no navegador; nunca publique `service_role`.
 
+A senha não é salva no frontend nem na tabela `public.perfis`. Ela é enviada somente
+pelos métodos oficiais do Supabase Auth (`signUp`, `signInWithPassword` e `updateUser`).
+Não crie uma coluna de senha nem envie a senha para uma API própria ou para as tabelas
+de negócio.
+
 Execute a migration `../../backend/supabase/migrations/20261008000000_initial_schema.sql`
 no projeto Supabase usando o Supabase CLI ou o SQL editor. Configure no Supabase Auth a URL de
 `reset-password.html` como URL de redirecionamento permitida para o fluxo de recuperação.
