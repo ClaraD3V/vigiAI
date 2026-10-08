@@ -1,7 +1,7 @@
-﻿(function () {
+(function () {
   "use strict";
 
-  const AUTH_API_URL = "";
+  const authClient = globalThis.vigiAISupabase && globalThis.vigiAISupabase.client;
   const loginForm = document.querySelector("#loginForm");
   const signupForm = document.querySelector("#signupForm");
   const authMessage = document.querySelector("#authMessage");
@@ -114,26 +114,21 @@
     event.preventDefault();
     const { valid, values } = validateLogin(loginForm);
     if (!valid) return;
-
-    if (!AUTH_API_URL) {
-      showMessage("A autenticação ainda não está conectada a um backend seguro. Neste protótipo, você será redirecionado para a área do cliente.", "ok");
-      window.localStorage.setItem("vigiAI-demo-auth", "true");
-      window.setTimeout(() => window.location.assign("dashboard.html"), 800);
+    if (!authClient) {
+      showMessage("A autenticação ainda não está configurada. Defina VIGIAI_SUPABASE com a URL e a chave pública do projeto.", "error");
       return;
     }
 
     showMessage("Autenticando…", "info");
 
     try {
-      const response = await fetch(AUTH_API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "login", ...values })
+      const { error } = await authClient.auth.signInWithPassword({
+        email: values.email,
+        password: values.password
       });
-
-      if (!response.ok) throw new Error();
-      window.localStorage.setItem("vigiAI-demo-auth", "true");
-      window.location.assign("dashboard.html");
+      if (error) throw error;
+      showMessage("Login realizado. Você será redirecionado para sua conta.", "ok");
+      window.setTimeout(() => window.location.assign("dashboard.html"), 700);
     } catch {
       showMessage("E-mail ou senha inválidos. Tente novamente ou crie uma conta.", "error");
     }
@@ -144,26 +139,32 @@
     const { valid, values } = validateSignup(signupForm);
     if (!valid) return;
 
-    if (!AUTH_API_URL) {
-      showMessage("O cadastro ainda não está conectado a um backend. Neste protótipo, a conta foi simulada com sucesso.", "ok");
-      window.localStorage.setItem("vigiAI-demo-auth", "true");
-      window.setTimeout(() => window.location.assign("dashboard.html"), 800);
+    if (!authClient) {
+      showMessage("O cadastro ainda não está configurado. Defina VIGIAI_SUPABASE com a URL e a chave pública do projeto.", "error");
       return;
     }
 
     showMessage("Criando sua conta…", "info");
 
     try {
-      const response = await fetch(AUTH_API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "signup", registration: buildAccountRegistration(values) })
+      const registration = buildAccountRegistration(values);
+      const { data, error } = await authClient.auth.signUp({
+        email: registration.email,
+        password: registration.password,
+        options: {
+          data: { full_name: registration.full_name },
+          emailRedirectTo: new URL("account.html", window.location.href).href
+        }
       });
-
-      if (!response.ok) throw new Error();
-      showMessage("Conta criada com sucesso! Faça login para continuar.", "ok");
-      setActiveTab("login");
-      signupForm.reset();
+      if (error) throw error;
+      if (data.session) {
+        showMessage("Conta criada com sucesso! Você será redirecionado.", "ok");
+        window.setTimeout(() => window.location.assign("dashboard.html"), 700);
+      } else {
+        showMessage("Conta criada. Verifique seu e-mail para confirmar o cadastro.", "ok");
+        setActiveTab("login");
+        signupForm.reset();
+      }
     } catch {
       showMessage("Não foi possível criar a conta. Tente novamente mais tarde.", "error");
     }
