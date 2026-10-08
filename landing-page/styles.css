@@ -58,6 +58,10 @@ body {
   font: 16px/1.55 Georgia, "Times New Roman", serif;
 }
 
+a {
+  color: var(--accent);
+}
+
 h1,
 h2,
 h3,
@@ -469,13 +473,143 @@ input:focus {
   color: var(--accent);
 }
 
-.form-copy {
-  font-size: 0.84rem;
-  margin-top: 12px;
+.account-access {
+  border-top: 1px solid var(--line);
 }
 
-.form-copy a {
+.account-access__content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+
+.eyebrow {
   color: var(--accent);
+  font: 700 0.78rem system-ui;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.account-access__content h2 {
+  max-width: 650px;
+}
+
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-top {
+  background: var(--surface);
+}
+
+.auth-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 56px 0;
+}
+
+.auth-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(320px, 0.7fr);
+  gap: 48px;
+  align-items: center;
+}
+
+.auth-hero h1 {
+  max-width: 590px;
+}
+
+.auth-benefits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 24px;
+  font: 0.9rem system-ui;
+}
+
+.auth-benefits span {
+  background: var(--soft);
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  padding: 8px 12px;
+}
+
+.auth-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 16px 40px rgba(20, 33, 61, 0.07);
+}
+
+.auth-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.auth-tab {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.auth-tab.is-active {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent);
+}
+
+.auth-panel[hidden] {
+  display: none;
+}
+
+.auth-submit {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.consent-box {
+  margin: 8px 0 18px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--bg);
+  padding: 16px;
+}
+
+.consent-option {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin: 12px 0;
+  font: 0.9rem system-ui;
+}
+
+.consent-option input {
+  width: auto;
+  margin-top: 2px;
+}
+
+.consent-help {
+  font: 0.78rem system-ui;
+  color: var(--muted);
+  margin: 12px 0 0;
+}
+
+.auth-links {
+  text-align: center;
+  margin: 16px 0 0;
+  font: 0.86rem system-ui;
 }
 
 .form-copy,
@@ -510,5 +644,15 @@ input:focus {
   .card,
   .chan {
     padding: 14px;
+  }
+
+  .account-access__content,
+  .auth-shell {
+    grid-template-columns: 1fr;
+    display: grid;
+  }
+
+  .auth-main {
+    padding: 32px 0;
   }
 }
