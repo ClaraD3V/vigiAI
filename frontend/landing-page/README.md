@@ -17,6 +17,10 @@ Execute a migration `../../backend/supabase/migrations/20261008000000_initial_sc
 no projeto Supabase usando o Supabase CLI ou o SQL editor. Configure no Supabase Auth a URL de
 `reset-password.html` como URL de redirecionamento permitida para o fluxo de recuperação.
 
+As tabelas de negócio do banco estão em português, sem acentos nos identificadores SQL:
+`perfis`, `planos`, `assinaturas`, `perfis_candidatos`, `monitoramentos`,
+`canais_notificacao`, `eventos_monitoramento` e `logs_auditoria`.
+
 As páginas de autenticação disponíveis são:
 
 - `account.html` — login e cadastro;

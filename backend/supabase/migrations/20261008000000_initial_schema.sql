@@ -1,187 +1,229 @@
 create extension if not exists pgcrypto;
 
-create table if not exists public.profiles (
+create table if not exists public.perfis (
   id uuid primary key references auth.users(id) on delete cascade,
-  full_name text,
+  nome_completo text,
   email text,
-  phone text,
+  telefone text,
   cpf text,
-  birth_date date,
-  created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now()
+  data_nascimento date,
+  criado_em timestamptz not null default now(),
+  atualizado_em timestamptz not null default now()
 );
 
-create table if not exists public.plans (
+create table if not exists public.planos (
   id uuid primary key default gen_random_uuid(),
-  name text not null,
-  slug text unique not null,
-  description text,
-  price numeric(10,2) not null default 0 check (price >= 0),
-  billing_period text not null default 'monthly',
-  max_notification_channels integer not null check (max_notification_channels > 0),
-  is_active boolean not null default true,
-  created_at timestamptz not null default now()
+  nome text not null,
+  identificador text unique not null,
+  descricao text,
+  preco numeric(10,2) not null default 0 check (preco >= 0),
+  periodo_cobranca text not null default 'mensal',
+  max_canais_notificacao integer not null check (max_canais_notificacao > 0),
+  ativo boolean not null default true,
+  criado_em timestamptz not null default now()
 );
 
-create table if not exists public.subscriptions (
+create table if not exists public.assinaturas (
   id uuid primary key default gen_random_uuid(),
-  user_id uuid not null references public.profiles(id) on delete cascade,
-  plan_id uuid not null references public.plans(id),
-  status text not null default 'active' check (status in ('trialing','active','paused','canceled','expired')),
-  started_at timestamptz not null default now(),
-  expires_at timestamptz,
-  created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now()
+  usuario_id uuid not null references public.perfis(id) on delete cascade,
+  plano_id uuid not null references public.planos(id),
+  status text not null default 'ativa' check (status in ('teste','ativa','pausada','cancelada','expirada')),
+  iniciada_em timestamptz not null default now(),
+  expira_em timestamptz,
+  criado_em timestamptz not null default now(),
+  atualizado_em timestamptz not null default now()
 );
 
-create table if not exists public.candidate_profiles (
+create table if not exists public.perfis_candidatos (
   id uuid primary key default gen_random_uuid(),
-  user_id uuid not null references public.profiles(id) on delete cascade,
-  full_name text not null,
-  registration_number text,
+  usuario_id uuid not null references public.perfis(id) on delete cascade,
+  nome_completo text not null,
+  numero_inscricao text,
   cpf text,
-  birth_date date,
-  created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now()
+  data_nascimento date,
+  criado_em timestamptz not null default now(),
+  atualizado_em timestamptz not null default now()
 );
 
-create table if not exists public.monitors (
+create table if not exists public.monitoramentos (
   id uuid primary key default gen_random_uuid(),
-  user_id uuid not null references public.profiles(id) on delete cascade,
-  candidate_profile_id uuid not null references public.candidate_profiles(id) on delete cascade,
-  source_url text not null,
-  source_name text,
-  status text not null default 'pending' check (status in ('pending','active','paused','completed','error')),
-  last_checked_at timestamptz,
-  last_match_at timestamptz,
-  created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now()
+  usuario_id uuid not null references public.perfis(id) on delete cascade,
+  perfil_candidato_id uuid not null references public.perfis_candidatos(id) on delete cascade,
+  url_fonte text not null,
+  nome_fonte text,
+  status text not null default 'pendente'
+    check (status in ('pendente','ativo','pausado','concluido','erro')),
+  verificado_em timestamptz,
+  ultima_ocorrencia_em timestamptz,
+  criado_em timestamptz not null default now(),
+  atualizado_em timestamptz not null default now()
 );
 
-create table if not exists public.notification_channels (
+create table if not exists public.canais_notificacao (
   id uuid primary key default gen_random_uuid(),
-  user_id uuid not null references public.profiles(id) on delete cascade,
-  type text not null check (type in ('whatsapp','telegram','instagram')),
-  destination text not null,
-  is_verified boolean not null default false,
-  is_active boolean not null default true,
-  created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now()
+  usuario_id uuid not null references public.perfis(id) on delete cascade,
+  tipo text not null check (tipo in ('whatsapp','telegram','instagram')),
+  destino text not null,
+  verificado boolean not null default false,
+  ativo boolean not null default true,
+  criado_em timestamptz not null default now(),
+  atualizado_em timestamptz not null default now()
 );
 
-create table if not exists public.monitor_notification_channels (
-  monitor_id uuid not null references public.monitors(id) on delete cascade,
-  notification_channel_id uuid not null references public.notification_channels(id) on delete cascade,
-  created_at timestamptz not null default now(),
-  primary key (monitor_id, notification_channel_id)
+create table if not exists public.monitoramentos_canais_notificacao (
+  monitoramento_id uuid not null references public.monitoramentos(id) on delete cascade,
+  canal_notificacao_id uuid not null references public.canais_notificacao(id) on delete cascade,
+  criado_em timestamptz not null default now(),
+  primary key (monitoramento_id, canal_notificacao_id)
 );
 
-create table if not exists public.monitor_events (
+create table if not exists public.eventos_monitoramento (
   id uuid primary key default gen_random_uuid(),
-  monitor_id uuid not null references public.monitors(id) on delete cascade,
-  event_type text not null check (event_type in ('match_found','new_publication','status_changed','error')),
-  title text,
-  description text,
-  source_url text,
-  matched_value text,
-  detected_at timestamptz not null default now(),
-  notified_at timestamptz,
-  created_at timestamptz not null default now()
+  monitoramento_id uuid not null references public.monitoramentos(id) on delete cascade,
+  tipo_evento text not null check (tipo_evento in ('ocorrencia_encontrada','nova_publicacao','status_alterado','erro')),
+  titulo text,
+  descricao text,
+  url_fonte text,
+  valor_correspondente text,
+  detectado_em timestamptz not null default now(),
+  notificado_em timestamptz,
+  criado_em timestamptz not null default now()
 );
 
-create table if not exists public.audit_logs (
+create table if not exists public.logs_auditoria (
   id uuid primary key default gen_random_uuid(),
-  user_id uuid not null references public.profiles(id) on delete cascade,
-  action text not null,
-  resource_type text,
-  resource_id uuid,
-  metadata jsonb not null default '{}'::jsonb,
-  created_at timestamptz not null default now()
+  usuario_id uuid not null references public.perfis(id) on delete cascade,
+  acao text not null,
+  tipo_recurso text,
+  id_recurso uuid,
+  metadados jsonb not null default '{}'::jsonb,
+  criado_em timestamptz not null default now()
 );
 
-insert into public.plans (name, slug, description, price, max_notification_channels)
+insert into public.planos (nome, identificador, descricao, preco, max_canais_notificacao)
 values
-  ('Básico', 'basic', 'Para começar a acompanhar um processo.', 9.99, 1),
-  ('Médio', 'medium', 'Mais monitoramentos e canais.', 14.99, 2),
+  ('Básico', 'basico', 'Para começar a acompanhar um processo.', 9.99, 1),
+  ('Médio', 'medio', 'Mais monitoramentos e canais.', 14.99, 2),
   ('Pro', 'pro', 'Para acompanhar vários processos.', 19.99, 3)
-on conflict (slug) do update set name = excluded.name, price = excluded.price,
-  max_notification_channels = excluded.max_notification_channels;
+on conflict (identificador) do update set
+  nome = excluded.nome,
+  preco = excluded.preco,
+  max_canais_notificacao = excluded.max_canais_notificacao;
 
-create or replace function public.handle_new_user()
+create or replace function public.criar_perfil_novo_usuario()
 returns trigger language plpgsql security definer set search_path = public
 as $$
 begin
-  insert into public.profiles (id, email, full_name)
+  insert into public.perfis (id, email, nome_completo)
   values (new.id, new.email, new.raw_user_meta_data ->> 'full_name')
-  on conflict (id) do update set email = excluded.email, full_name = coalesce(excluded.full_name, profiles.full_name);
+  on conflict (id) do update set
+    email = excluded.email,
+    nome_completo = coalesce(excluded.nome_completo, public.perfis.nome_completo);
   return new;
 end;
 $$;
 
-drop trigger if exists on_auth_user_created on auth.users;
-create trigger on_auth_user_created after insert on auth.users
-for each row execute procedure public.handle_new_user();
+drop trigger if exists ao_criar_usuario on auth.users;
+create trigger ao_criar_usuario after insert on auth.users
+for each row execute procedure public.criar_perfil_novo_usuario();
 
-create or replace function public.set_updated_at()
+create or replace function public.definir_atualizado_em()
 returns trigger language plpgsql as $$
-begin new.updated_at = now(); return new; end;
+begin
+  new.atualizado_em = now();
+  return new;
+end;
 $$;
 
 do $$
-declare t text;
+declare tabela text;
 begin
-  foreach t in array array['profiles','subscriptions','candidate_profiles','monitors','notification_channels'] loop
-    execute format('drop trigger if exists set_updated_at on public.%I', t);
-    execute format('create trigger set_updated_at before update on public.%I for each row execute procedure public.set_updated_at()', t);
+  foreach tabela in array array['perfis','assinaturas','perfis_candidatos','monitoramentos','canais_notificacao'] loop
+    execute format('drop trigger if exists definir_atualizado_em on public.%I', tabela);
+    execute format(
+      'create trigger definir_atualizado_em before update on public.%I for each row execute procedure public.definir_atualizado_em()',
+      tabela
+    );
   end loop;
 end $$;
 
-create index if not exists monitors_user_id_idx on public.monitors(user_id);
-create index if not exists events_monitor_id_idx on public.monitor_events(monitor_id);
-create index if not exists channels_user_id_idx on public.notification_channels(user_id);
+create index if not exists monitoramentos_usuario_id_idx on public.monitoramentos(usuario_id);
+create index if not exists eventos_monitoramento_id_idx on public.eventos_monitoramento(monitoramento_id);
+create index if not exists canais_notificacao_usuario_id_idx on public.canais_notificacao(usuario_id);
 
-alter table public.profiles enable row level security;
-alter table public.plans enable row level security;
-alter table public.subscriptions enable row level security;
-alter table public.candidate_profiles enable row level security;
-alter table public.monitors enable row level security;
-alter table public.notification_channels enable row level security;
-alter table public.monitor_notification_channels enable row level security;
-alter table public.monitor_events enable row level security;
-alter table public.audit_logs enable row level security;
+alter table public.perfis enable row level security;
+alter table public.planos enable row level security;
+alter table public.assinaturas enable row level security;
+alter table public.perfis_candidatos enable row level security;
+alter table public.monitoramentos enable row level security;
+alter table public.canais_notificacao enable row level security;
+alter table public.monitoramentos_canais_notificacao enable row level security;
+alter table public.eventos_monitoramento enable row level security;
+alter table public.logs_auditoria enable row level security;
 
-drop policy if exists "public reads active plans" on public.plans;
-create policy "public reads active plans" on public.plans for select using (is_active = true);
+drop policy if exists "leitura publica de planos ativos" on public.planos;
+create policy "leitura publica de planos ativos" on public.planos
+for select using (ativo = true);
 
 do $$
-declare t text;
+declare tabela text;
 begin
-  foreach t in array array['subscriptions','candidate_profiles','monitors','notification_channels','audit_logs'] loop
-    execute format('drop policy if exists "owner select" on public.%I', t);
-    execute format('create policy "owner select" on public.%I for select using (user_id = auth.uid() or id = auth.uid())', t);
-    execute format('drop policy if exists "owner insert" on public.%I', t);
-    execute format('create policy "owner insert" on public.%I for insert with check (user_id = auth.uid() or id = auth.uid())', t);
-    execute format('drop policy if exists "owner update" on public.%I', t);
-    execute format('create policy "owner update" on public.%I for update using (user_id = auth.uid() or id = auth.uid()) with check (user_id = auth.uid() or id = auth.uid())', t);
-    execute format('drop policy if exists "owner delete" on public.%I', t);
-    execute format('create policy "owner delete" on public.%I for delete using (user_id = auth.uid() or id = auth.uid())', t);
+  foreach tabela in array array['assinaturas','perfis_candidatos','monitoramentos','canais_notificacao','logs_auditoria'] loop
+    execute format('drop policy if exists "proprietario seleciona" on public.%I', tabela);
+    execute format(
+      'create policy "proprietario seleciona" on public.%I for select using (usuario_id = auth.uid())',
+      tabela
+    );
+    execute format('drop policy if exists "proprietario insere" on public.%I', tabela);
+    execute format(
+      'create policy "proprietario insere" on public.%I for insert with check (usuario_id = auth.uid())',
+      tabela
+    );
+    execute format('drop policy if exists "proprietario atualiza" on public.%I', tabela);
+    execute format(
+      'create policy "proprietario atualiza" on public.%I for update using (usuario_id = auth.uid()) with check (usuario_id = auth.uid())',
+      tabela
+    );
+    execute format('drop policy if exists "proprietario exclui" on public.%I', tabela);
+    execute format(
+      'create policy "proprietario exclui" on public.%I for delete using (usuario_id = auth.uid())',
+      tabela
+    );
   end loop;
 end $$;
 
-drop policy if exists "profile owner select" on public.profiles;
-drop policy if exists "profile owner insert" on public.profiles;
-drop policy if exists "profile owner update" on public.profiles;
-drop policy if exists "profile owner delete" on public.profiles;
-create policy "profile owner select" on public.profiles for select using (id = auth.uid());
-create policy "profile owner insert" on public.profiles for insert with check (id = auth.uid());
-create policy "profile owner update" on public.profiles for update using (id = auth.uid()) with check (id = auth.uid());
-create policy "profile owner delete" on public.profiles for delete using (id = auth.uid());
+drop policy if exists "proprietario seleciona perfil" on public.perfis;
+drop policy if exists "proprietario insere perfil" on public.perfis;
+drop policy if exists "proprietario atualiza perfil" on public.perfis;
+drop policy if exists "proprietario exclui perfil" on public.perfis;
+create policy "proprietario seleciona perfil" on public.perfis
+for select using (id = auth.uid());
+create policy "proprietario insere perfil" on public.perfis
+for insert with check (id = auth.uid());
+create policy "proprietario atualiza perfil" on public.perfis
+for update using (id = auth.uid()) with check (id = auth.uid());
+create policy "proprietario exclui perfil" on public.perfis
+for delete using (id = auth.uid());
 
-drop policy if exists "monitor channel owner access" on public.monitor_notification_channels;
-create policy "monitor channel owner access" on public.monitor_notification_channels
-for all using (exists (select 1 from public.monitors m where m.id = monitor_id and m.user_id = auth.uid()))
-with check (exists (select 1 from public.monitors m where m.id = monitor_id and m.user_id = auth.uid()));
+drop policy if exists "proprietario acessa canais do monitoramento"
+  on public.monitoramentos_canais_notificacao;
+create policy "proprietario acessa canais do monitoramento"
+on public.monitoramentos_canais_notificacao
+for all
+using (exists (
+  select 1 from public.monitoramentos m
+  where m.id = monitoramento_id and m.usuario_id = auth.uid()
+))
+with check (exists (
+  select 1 from public.monitoramentos m
+  where m.id = monitoramento_id and m.usuario_id = auth.uid()
+));
 
-drop policy if exists "event owner access" on public.monitor_events;
-create policy "event owner access" on public.monitor_events
-for select using (exists (select 1 from public.monitors m where m.id = monitor_id and m.user_id = auth.uid()));
+drop policy if exists "proprietario acessa eventos do monitoramento"
+  on public.eventos_monitoramento;
+create policy "proprietario acessa eventos do monitoramento"
+on public.eventos_monitoramento
+for select using (exists (
+  select 1 from public.monitoramentos m
+  where m.id = monitoramento_id and m.usuario_id = auth.uid()
+));
