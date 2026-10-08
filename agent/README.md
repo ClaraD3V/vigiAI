@@ -2,8 +2,11 @@
 
 Agente responsável por **descobrir se um edital de resultado/homologação de
 concurso público se refere a um candidato monitorado** (nome completo +
-número de inscrição) e notificar via WhatsApp quando houver match, ou enviar
-um relatório mensal de "não foi dessa vez" quando não houver.
+número de inscrição) e notificar via WhatsApp quando houver match (candidato
+aprovado/convocado/nomeado). O andamento do monitoramento durante o mês —
+inclusive para quem ainda não teve match — é acompanhado pelo usuário no
+dashboard do front, alimentado pelo agente via Supabase (veja "Dashboard
+(Supabase)" abaixo).
 
 A fonte de dados é o [IBAM Concursos](https://www.ibamsp-concursos.org.br/),
 filtrado por cidade via o parâmetro `busca=` da própria URL de busca do site
@@ -23,7 +26,11 @@ documentos do concurso)
         ↓
 busca determinística por nome + inscrição no texto (sem LLM)
         ↓
-só em caso de match: LLM (opcional) classifica o pequeno trecho encontrado
+match de confiança média (só nome OU só inscrição): LLM (opcional) arbitra
+se é o mesmo candidato — sem LLM, fica só registrado, sem notificar
+        ↓
+só em caso de match confirmado: LLM (opcional) classifica o pequeno trecho
+encontrado e, opcionalmente, gera a mensagem de WhatsApp
         ↓
 WhatsApp
 ```
@@ -84,15 +91,37 @@ npm test                 # suíte determinística (sem rede, sem LLM, sem WhatsA
 
 ## Monitoramento contínuo
 
-- `src/monitoring/scheduler.js` roda `runDailyCheck` todo dia (cron em
-  `CRON_DAILY_CHECK`) e, só no último dia do mês, `runMonthlyReport`.
+- `src/monitoring/scheduler.js` roda `runDailyCheck` uma vez por dia, às
+  19:00 (cron em `CRON_DAILY_CHECK`). Não há mais relatório mensal — o
+  andamento é visto pelo usuário no dashboard do front (veja abaixo).
 - `runDailyCheck` sincroniza cada cidade distinta entre os monitoramentos
   ativos (`syncCity`, 1x por cidade) e depois checa cada monitoramento contra
   os documentos da sua cidade ainda não vistos por ele (`checkedDocuments`),
   nunca reprocessando um PDF já conhecido.
 - Regras de confiança (`src/matching/identity.js`): inscrição + nome = alta
-  confiança (notifica); só um dos dois = média (fica registrado, mas só
-  notifica se `CONFIDENCE_THRESHOLD` permitir); nada bate = não notifica.
+  confiança (notifica direto); só um dos dois = média (por padrão fica só
+  registrado; se `OPENROUTER_API_KEY` estiver configurada, o LLM arbitra se é
+  o mesmo candidato antes de notificar — `src/llm/arbitrateMatch.js`); nada
+  bate = não notifica.
+
+## Dashboard (Supabase)
+
+A cada execução diária, o agente grava no Supabase (best-effort — se o
+Supabase não estiver configurado ou falhar, o monitoramento continua
+normalmente, só não atualiza o dashboard):
+
+- `agent_daily_runs` — um registro por execução (`runDailyCheck`), com
+  contagens agregadas (cidades sincronizadas, monitoramentos checados,
+  matches encontrados, erros).
+- `agent_monitoring_snapshots` — upsert por monitoramento a cada checagem,
+  refletindo status atual, quantos documentos já foram vistos, etc.
+- `agent_match_results` — um registro por match confirmado, incluindo se foi
+  confirmado por arbitragem do LLM (`llm_arbitrated`).
+
+Rode `agent/supabase/schema.sql` uma vez no SQL Editor do seu projeto
+Supabase para criar essas tabelas, e configure `SUPABASE_URL` e
+`SUPABASE_SERVICE_ROLE_KEY` no `.env` (a service role key é secreta — só uso
+server-side, nunca exposta no front).
 
 ## Escalando para outras cidades
 

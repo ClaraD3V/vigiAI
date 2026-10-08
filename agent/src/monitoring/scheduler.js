@@ -2,13 +2,7 @@
 
 const cron = require("node-cron");
 const config = require("../config");
-const { runDailyCheck, runMonthlyReport } = require("./runner");
-
-function isLastDayOfMonth(date) {
-  const tomorrow = new Date(date);
-  tomorrow.setUTCDate(tomorrow.getUTCDate() + 1);
-  return tomorrow.getUTCDate() === 1;
-}
+const { runDailyCheck } = require("./runner");
 
 function start() {
   cron.schedule(config.cron.dailyCheck, async () => {
@@ -20,17 +14,7 @@ function start() {
     }
   });
 
-  cron.schedule(config.cron.monthlyReport, async () => {
-    if (!isLastDayOfMonth(new Date())) return;
-    try {
-      const sent = await runMonthlyReport();
-      console.log(`[scheduler] relatório mensal enviado para ${sent.length} monitoramento(s).`);
-    } catch (error) {
-      console.error("[scheduler] erro no relatório mensal:", error);
-    }
-  });
-
-  console.log(`[scheduler] checagem diária: "${config.cron.dailyCheck}" | relatório mensal: "${config.cron.monthlyReport}" (só executa no último dia do mês)`);
+  console.log(`[scheduler] checagem diária: "${config.cron.dailyCheck}"`);
 }
 
-module.exports = { start, isLastDayOfMonth };
+module.exports = { start };

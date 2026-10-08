@@ -19,8 +19,7 @@ const config = {
   dataDir: path.join(__dirname, "..", "data"),
 
   cron: {
-    dailyCheck: process.env.CRON_DAILY_CHECK || "0 9 * * *",
-    monthlyReport: process.env.CRON_MONTHLY_REPORT || "0 10 * * *"
+    dailyCheck: process.env.CRON_DAILY_CHECK || "0 19 * * *"
   },
 
   confidenceThreshold: float(process.env.CONFIDENCE_THRESHOLD, 0.9),
@@ -32,8 +31,15 @@ const config = {
 
   llm: {
     apiKey: process.env.OPENROUTER_API_KEY || "",
-    model: process.env.OPENROUTER_MODEL || "openai/gpt-4o-mini",
+    // Modelo gratuito (sufixo ":free"). A disponibilidade muda com frequência —
+    // confira https://openrouter.ai/models?max_price=0 antes de usar em produção.
+    model: process.env.OPENROUTER_MODEL || "meta-llama/llama-3.3-70b-instruct:free",
     baseUrl: process.env.OPENROUTER_BASE_URL || "https://openrouter.ai/api/v1"
+  },
+
+  supabase: {
+    url: process.env.SUPABASE_URL || "",
+    serviceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY || ""
   },
 
   whatsapp: {

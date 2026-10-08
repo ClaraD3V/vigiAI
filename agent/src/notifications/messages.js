@@ -17,15 +17,4 @@ function matchFoundMessage({ fullName, publication }) {
   );
 }
 
-function monthlyReportMessage({ fullName, monitoringSince, documentsChecked }) {
-  const firstName = firstNameTitleCase(fullName);
-
-  return (
-    `📋 Olá, ${firstName}!\n\n` +
-    `Este mês não encontramos nenhuma publicação sua nos concursos monitorados ` +
-    `(verificamos ${documentsChecked} documento(s) desde ${monitoringSince}).\n\n` +
-    `Não foi dessa vez, mas não desista! Continuamos monitorando por você.`
-  );
-}
-
-module.exports = { matchFoundMessage, monthlyReportMessage };
+module.exports = { matchFoundMessage };
