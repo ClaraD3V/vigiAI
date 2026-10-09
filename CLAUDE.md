@@ -226,7 +226,7 @@ banca.
 7. [x] **Execuções**: linha do tempo lendo `agent_daily_runs` e `agent_match_results`.
 8. [ ] **Início**: resumo (fatura, inscrições, última/próxima leitura).
 9. [ ] **Meu perfil**: dados + excluir conta via RPC.
-10. [ ] **Landing**: headline nova, plano de R$ 4,99, Entrar/Criar conta no topo
+10. [x] **Landing**: headline nova, plano de R$ 4,99, Entrar/Criar conta no topo
     direito. Remover menções a CPF e aos planos antigos.
 11. [ ] Substituir `dashboard.html`/`dashboard.js` (hoje 100% mock) pelo portal.
 12. [ ] Testar o fluxo inteiro contra o Supabase real (criar conta → consentir →
