@@ -61,7 +61,7 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--ink);
-  font: 16px/1.55 Georgia, "Times New Roman", serif;
+  font: 16px/1.55 var(--sans);
 }
 
 a {
@@ -76,7 +76,7 @@ button,
 input,
 select,
 label {
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-family: var(--serif);
 }
 
 h1 {

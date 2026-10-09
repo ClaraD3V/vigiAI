@@ -32,7 +32,7 @@ test("usa só as três famílias de fonte definidas", () => {
 });
 
 test("números e mensagens combinados para a landing", () => {
-  for (const texto of ["Ctrl+F em edital?", "R$ 4,99", "733", "15.289", "635 páginas", "2.496", "00h05", "99 nomes aparecem mais de uma vez", "Edital nº 149/2026", "sala 121"]) {
+  for (const texto of ["Ctrl+F em edital?", "R$ 4,99", "00h05", "99 nomes aparecem mais de uma vez", "Cadastre nome e inscrição", "Você foi aprovado e nomeado", "Milhares", "Automatizado", "Exemplo: como funciona com resultados reais"]) {
     assert.ok(html.includes(texto), `faltou "${texto}"`);
   }
   assert.match(html, /account\.html#criar/);
