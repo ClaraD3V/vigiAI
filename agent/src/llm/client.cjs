@@ -1,6 +1,6 @@
 "use strict";
 
-const config = require("../config");
+const config = require("../config.cjs");
 
 function isEnabled() {
   return Boolean(config.llm.apiKey);
