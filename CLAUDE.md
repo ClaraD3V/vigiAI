@@ -237,6 +237,12 @@ banca.
   sessão e o fluxo para em "verifique seu e-mail". Para a demo, considerar desligar.
 - Configurar `reset-password.html` como Redirect URL no Supabase Auth.
 - Horário do agente (19h no código × 00h05 na comunicação).
+- **O agente mudou na main** (`agent/agent-v2.cjs`; os módulos antigos `agent/src/db/`,
+  `monitoring/`, `matching/` e `agent/supabase/schema.sql` foram apagados). Em 09/10/2026
+  o v2 **não grava no Supabase**: só imprime "Dados prontos para Supabase". Sem isso as
+  abas Execuções e Início ficam sempre vazias. Combinar com a Clara que ele passe a ler
+  `agente_inscricoes` e gravar `agent_daily_runs` e `agent_match_results` (contrato da
+  seção 4). Antes, o agente antigo nunca gravava `found = false`; confirmar o que o v2 fará.
 - Pessoa real para a demo.
 - O `README.md` da raiz descreve um frontend React/Vite que não existe; a plataforma
   é o site estático em `frontend/landing-page/`.
