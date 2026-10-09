@@ -116,18 +116,17 @@ cd agent
 npm run dev           # Inicia na porta 3001
 npm run build         # Compila TypeScript
 
-# Frontend específico
+# Frontend específico (site estático em frontend/landing-page)
 cd frontend
-npm run dev           # Inicia na porta 5173
-npm run build         # Build para produção
+npm run test          # Roda os testes (node --test)
 ```
 
 ## 🚢 Deploy
 
 ### Frontend (Vercel)
 ```bash
-# Vercel auto-detecta vite.config.ts
-# Rodar: npm run build
+# Site estático, sem build. Root Directory do projeto: frontend
+# frontend/vercel.json aponta outputDirectory para landing-page
 ```
 
 ### Backend (Railway / Fly.io)
