@@ -16,7 +16,8 @@ const config = {
   searchCity: "Santos",
   searchNumber: "11659",
   searchName: "JOSUEL DE JESUS MIRANDA",
-  whatsappNumber: "5513982208272",
+  // searchNumber: "11254",
+  // searchName: "MARINA DE JESUS SOARES",
   baseUrl: "https://www.ibamsp-concursos.org.br",
 };
 
