@@ -68,7 +68,7 @@
     return h("article", { class: "exe-found" },
       h("div", { class: "exe-found__head" },
         h("span", { class: "exe-chip", text: card.typeLabel }),
-        card.inscricao ? h("span", { class: "exe-meta", text: `Inscrição ${card.inscricao}` }) : null),
+        card.inscricao ? h("span", { class: "exe-meta" }, "Inscrição ", h("span", { class: "mono", text: card.inscricao })) : null),
       card.title ? h("h3", { text: card.title }) : null,
       card.excerpt ? h("blockquote", { text: card.excerpt }) : null,
       card.deadline ? h("p", { class: "exe-deadline" }, h("strong", { text: "Prazo: " }), card.deadline) : null,
@@ -124,7 +124,7 @@
     const more = state.hasMore
       ? h("button", { type: "button", class: "btn ghost", text: "Ver leituras anteriores", onclick: event => loadMore(event.currentTarget) })
       : null;
-    root.replaceChildren(toolbar, h("ol", { class: "exe-list" }, timeline.map(entryNode)), more);
+    root.replaceChildren(...[toolbar, h("ol", { class: "exe-list" }, timeline.map(entryNode)), more].filter(Boolean));
   }
 
   // ---------- entrada ----------
