@@ -1203,3 +1203,139 @@ select {
     display: none;
   }
 }
+
+/* ---------- Execuções (linha do tempo) ---------- */
+
+.exe-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.exe-toolbar .muted {
+  margin: 0;
+  font: 0.88rem system-ui;
+}
+
+.exe-list {
+  list-style: none;
+  margin: 0 0 20px;
+  padding: 0;
+}
+
+.exe-item {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4px 20px;
+  padding: 16px 0;
+  border-top: 1px solid var(--line);
+}
+
+.exe-when {
+  color: var(--muted);
+  font: 600 0.88rem system-ui;
+}
+
+.exe-summary {
+  margin: 0;
+  font: 0.98rem/1.5 system-ui;
+}
+
+.exe-item.has-found .exe-summary {
+  font-weight: 700;
+}
+
+.exe-warn {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font: 0.82rem system-ui;
+}
+
+.exe-found {
+  margin-top: 12px;
+  padding: 16px 18px;
+  border: 1.5px solid var(--ok);
+  border-left-width: 6px;
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.exe-found__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.exe-chip {
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--ok);
+  color: var(--bg);
+  font: 700 0.78rem system-ui;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.exe-meta {
+  color: var(--muted);
+  font: 600 0.88rem system-ui;
+}
+
+.exe-found h3 {
+  margin: 4px 0 8px;
+  font-size: 1.05rem;
+}
+
+.exe-found blockquote,
+.exe-possible blockquote {
+  margin: 8px 0;
+  padding: 2px 0 2px 12px;
+  border-left: 3px solid var(--line);
+  color: var(--ink);
+  font: 0.9rem/1.5 system-ui;
+}
+
+.exe-deadline {
+  margin: 8px 0 12px;
+  font: 0.95rem system-ui;
+}
+
+.exe-possible {
+  margin-top: 10px;
+  padding: 10px 14px;
+  border: 1.5px dashed var(--line);
+  border-radius: 10px;
+  font: 0.9rem system-ui;
+}
+
+.exe-possible__label {
+  margin: 0;
+  color: var(--warn);
+  font-weight: 600;
+}
+
+.exe-possible a {
+  color: var(--accent);
+}
+
+.exe-empty {
+  padding: 24px 0;
+  border-top: 1px solid var(--line);
+  max-width: 560px;
+  font: 0.95rem/1.6 system-ui;
+}
+
+.exe-empty h2 {
+  margin: 0 0 8px;
+  font-size: 1.2rem;
+}
+
+@media (min-width: 800px) {
+  .exe-item {
+    grid-template-columns: 130px 1fr;
+  }
+}

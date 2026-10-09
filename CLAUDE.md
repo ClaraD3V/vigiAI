@@ -81,9 +81,12 @@ resultado, nomeação) — com o que fazer e o prazo.
 
 - `monitoring_id` do agente = `inscricoes.id::text`.
 - O agente grava em `agent_*` com a service_role; o portal só lê.
-- Hoje o agente guarda os monitoramentos em arquivo local (`agent/data/monitorings.json`)
-  e recebe via `POST /monitoramentos`. Sugestão para a Clara: ler direto da view
-  `agente_inscricoes` no início de cada execução.
+- O agente antigo guardava os monitoramentos em arquivo local; o `agent/agent-v2.cjs` (main)
+  ainda não lê nem grava no Supabase (ver seção 9). Sugestão para a Clara: ler a view
+  `agente_inscricoes` no início de cada execução e gravar `agent_*`.
+- A view `agente_inscricoes` considera só `assinaturas.status in ('teste','ativa')`; o portal
+  também trata `expira_em` no passado como sem assinatura. Nada no servidor muda o status
+  sozinho, então uma assinatura vencida continua "ativa" para o agente.
 - Atenção: o cron do agente está em `0 19 * * *` (19h). A plataforma comunica leitura
   à **00h05**. Alinhar com a Clara (`CRON_DAILY_CHECK="5 0 * * *"`).
 
@@ -91,8 +94,9 @@ resultado, nomeação) — com o que fazer e o prazo.
 
 ### Landing (`index.html`) — sem login
 
-- "Cara" do projeto: logo bonita, **sem cara de IA** (redesign virá depois).
-- Headline: "Ctrl+F em edital? Chega disso. Automatize agora com vigiAI."
+- **Feita (tarefa 10), ver seção 10:** `landing.css` próprio, três fontes, conceito do
+  marca-texto, logotipo só tipográfico, sem emojis.
+- Headline: "Ctrl+F em edital? Chega disso." (o "Automatize agora com vigiAI" ficou de fora do topo).
 - Informações da assinatura (R$ 4,99/mês, plano único), explicação da personalização,
   convite real para usar.
 - Botões **Entrar** e **Criar conta** no canto superior direito.
@@ -176,7 +180,9 @@ banca.
 - Leitura: `/edicoes/leitura/mobile/AAAA-MM-DD/{pagina}`
 - Edição analisada: **09/10/2026, nº 9221, 733 páginas**. O texto inteiro sai com
   `pdftotext -layout` em ~4 s.
-  - Págs. 16–660: **Edital nº 149/2026-SEPLA-RH**, convocação para as provas
+  - Págs. 16–25: texto do Edital 149/2026 (instruções). Págs. 26–660: lista de
+    candidatos (635 páginas).
+  - **Edital nº 149/2026-SEPLA-RH**, convocação para as provas
     objetivas do concurso do **Edital nº 74/2026-SEPLA-RH**, provas em
     **18/10/2026**, banca IBAM. Lista em ordem alfabética com inscrição, nome, local
     e sala: **15.289 candidatos**, 23 locais. **2.496 fazem prova na Unisanta,
@@ -221,12 +227,17 @@ banca.
    rota, sair.
 6. [x] **Assinatura**: wizard obrigatório no 1º acesso (plano → inscrições →
    envio → pagamento simulado) e modo de gerenciamento depois.
-7. [ ] **Execuções**: linha do tempo lendo `agent_daily_runs` e `agent_match_results`.
-8. [ ] **Início**: resumo (fatura, inscrições, última/próxima leitura).
-9. [ ] **Meu perfil**: dados + excluir conta via RPC.
-10. [ ] **Landing**: headline nova, plano de R$ 4,99, Entrar/Criar conta no topo
-    direito. Remover menções a CPF e aos planos antigos.
-11. [ ] Substituir `dashboard.html`/`dashboard.js` (hoje 100% mock) pelo portal.
+7. [x] **Execuções**: linha do tempo lendo `agent_daily_runs` e `agent_match_results`.
+8. [ ] **Início** ← **PRÓXIMA TAREFA.** Resumo (fatura, inscrições, última/próxima
+   leitura). A seção `#tab-inicio` do `portal.html` ainda é um marcador. Escutar
+   `portal:access` (seção 10) e reutilizar `executions-logic.js` (`formatRunDate`,
+   `nextReadingAt`, `buildTimeline`). Mostrar o plano de trabalho ao Vilela antes de codar.
+9. [ ] **Meu perfil**: dados + excluir conta via RPC (`#tab-perfil` é um marcador).
+10. [x] **Landing** (concluída). **Retoques pendentes:** (a) esmaecer as linhas da lista do
+    Diário cobertas pelo aviso do vigiAI no topo; (b) reduzir o vazio entre as seções
+    "Diferença" e "Preço" no desktop.
+11. [ ] Substituir `dashboard.html`/`dashboard.js` (hoje 100% mock) pelo portal. Nada mais
+    aponta para eles; falta só apagar os arquivos (e o `agent-contract.js`, se ficar órfão).
 12. [ ] Testar o fluxo inteiro contra o Supabase real (criar conta → consentir →
     assinar → cadastrar inscrição → ver execuções → excluir conta) no desktop e no
     celular; rodar os advisors de segurança do Supabase.
@@ -243,6 +254,86 @@ banca.
   abas Execuções e Início ficam sempre vazias. Combinar com a Clara que ele passe a ler
   `agente_inscricoes` e gravar `agent_daily_runs` e `agent_match_results` (contrato da
   seção 4). Antes, o agente antigo nunca gravava `found = false`; confirmar o que o v2 fará.
+- Redirect URLs do Supabase Auth: além de `reset-password.html`, incluir
+  `consentimento.html` (é o destino do link de confirmação de e-mail).
+- **Seed de demonstração aplicado:** apagar antes da apresentação (seção 10).
+- Branch nova da equipe `origin/feat-envio-whatsapp` (commit "Configurando Z API"): ainda
+  não revisada nem mesclada; mexe no envio de WhatsApp do agente.
+- Se o agente real passar a gravar `found = false` com confiança média, a tela Execuções já
+  mostra "possível correspondência"; hoje o agente antigo não gravava esse caso.
 - Pessoa real para a demo.
 - O `README.md` da raiz descreve um frontend React/Vite que não existe; a plataforma
   é o site estático em `frontend/landing-page/`.
+
+## 10. Estado atual e como retomar (atualizado em 09/10/2026)
+
+**Estado:** tarefas 1 a 7 e 10 concluídas; **próxima: tarefa 8 (Início)**; depois 9, 11, 12.
+Tudo está na `main` (e na `feature/plataforma`). 68 testes: `node --test frontend/landing-page/*.test.js`.
+
+### Como trabalhar com o Vilela
+- Mostrar o **plano antes de escrever código** em cada tarefa e esperar o ok.
+- Ao final de cada tarefa: commits pequenos em português (`feat:`, `fix:`, `docs:`, `chore:`),
+  com o trailer de co-autoria, **push sem perguntar**. Levar para a `main` só quando o Vilela
+  pedir (atualizar com a `main`, rodar os testes, push `feature/plataforma:main`).
+- Não commitar `prints-landing/` (capturas de tela locais). Sem `gh` e sem Python nesta
+  máquina; o shell é lento (comandos longos vão para segundo plano).
+
+### Mapa do front (`frontend/landing-page/`)
+- **Landing:** `index.html` + `landing.css`. O `landing.css` é carregado **só** pela landing;
+  `account`, `consentimento` e `portal` usam `styles.css`. Conceito **marca-texto**: o topo é
+  um trecho de lista no estilo do Diário com uma linha grifada em amarelo e o aviso do vigiAI
+  saindo dela. Amarelo (`#ffe14d`) só no grifo e em destaques pontuais; texto sobre ele
+  sempre em tinta escura. Três fontes, só elas: **Newsreader** (títulos), **Instrument Sans**
+  (texto e botões), **IBM Plex Mono** (inscrições). Sem emojis. Nomes e números do exemplo
+  são inventados, com inscrições **fora** de 50001–77951. `landing.test.js` trava conteúdo
+  proibido, fontes e contraste WCAG (calculado dos tokens do CSS). "Criar conta" leva a
+  `account.html#criar` (abre a aba de cadastro).
+- **Conta:** `account.html/.js` + `account-auth.js` (regras de senha, erros PT-BR,
+  `resolvePostLoginRoute`). **Consentimento:** `consentimento.html/.js` + `consent.js`.
+- **Portal:** `portal.html` + `portal.js` + `portal-logic.js` (guardas, hash). Abas por hash:
+  `#inicio`, `#execucoes`, `#assinatura`, `#perfil`. Sem assinatura ativa o portal trava na
+  aba Assinatura.
+- **Assinatura:** `assinatura.js` + `subscription-logic.js` (wizard Plano → Inscrições →
+  Envio → Pagamento e modo gerenciar). **Execuções:** `execucoes.js` + `executions-logic.js`.
+- **`dom-helpers.js`:** expõe `h(tag, props, ...filhos)` global, para montar DOM sem
+  `innerHTML` (dados do usuário entram como texto). Carregar antes dos módulos de aba.
+- Ordem dos scripts no `portal.html`: supabase-js, `supabase-env.js`, `supabase-config.js`,
+  `portal-logic.js`, `dom-helpers.js`, `subscription-logic.js`, `assinatura.js`,
+  `executions-logic.js`, `execucoes.js`, `portal.js` (por último).
+
+### Contrato entre o portal e as abas
+- `window.vigiAIPortal.refreshAccess()` relê sessão, perfil e assinatura **sem recarregar**;
+  se estava travado e liberou, vai para `#inicio`. Chamar depois de assinar e de cancelar.
+- Depois de cada `refreshAccess`, o portal dispara o evento **`portal:access`** na `window`
+  com `detail = { guard, session, perfil, assinatura }` (`assinatura` traz `status`,
+  `expira_em`, `iniciada_em`). Cada aba escuta esse evento para carregar os próprios dados
+  (a Início deve fazer o mesmo). `execucoes.js` também recarrega ao voltar para `#execucoes`.
+
+### Decisões de produto já tomadas
+- Assinatura: `upsert` em `assinaturas` por `usuario_id` (índice único); ao assinar de novo
+  reaproveita a linha e **reinicia `iniciada_em`**. Cancelar = `status = 'cancelada'`.
+  Inscrições e preferências ficam salvas ao cancelar; quem volta cai direto no Pagamento.
+- Remover inscrição apaga a linha; o gatilho `limpar_historico_inscricao` apaga junto o
+  snapshot e os resultados do agente. Aceite do plano não é gravado.
+- Pagamento só visual: grava bandeira, 4 últimos dígitos e titular; número e CVV nunca saem
+  do navegador. Cartão de demonstração mostrado na tela: `4242 4242 4242 4242`, validade
+  futura, CVV 123.
+- Execuções: só leituras desde `assinaturas.iniciada_em`; um achado nunca some (sem leitura
+  registrada vira entrada própria); aviso de falha parcial só quando `errors > 0`, em
+  linguagem de usuário; links só `http(s)`. Horário exibido em São Paulo (leitura às 00h05).
+
+### Dados de demonstração (seeds)
+- `backend/supabase/seeds/demo_execucoes_inserir.sql` (**já aplicado em 09/10/2026**) cria 5
+  leituras (05 a 09/10, 00h05), uma com falha parcial e um achado de alta confiança na mais
+  recente (convocação, prova em 18/10/2026 na Unisanta, Bloco M), só para
+  `gabrielvilelacarvalho@gmail.com` e suas inscrições 20230 e 20231. Também **recuou**
+  `assinaturas.iniciada_em` e `inscricoes.criado_em` desse usuário para 04/10.
+- `backend/supabase/seeds/demo_execucoes_apagar.sql` remove exatamente essas linhas e devolve
+  as datas originais. **Rodar antes da apresentação**, e em todo caso **antes de o agente real
+  começar a gravar** em `agent_*`, para a demo não se misturar com leituras reais.
+
+### Ambiente de teste
+- Usuário de teste: `gabrielvilelacarvalho@gmail.com` (inscrições 20230 e 20231, assinatura
+  ativa). Servir localmente: `cd frontend/landing-page && npx serve .`
+- Testes de interface com jsdom e capturas com puppeteer-core + Chrome ficaram fora do repo
+  (pasta temporária); refazer se precisar.

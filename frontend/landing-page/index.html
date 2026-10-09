@@ -3,73 +3,169 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>vigiAI — Monitoramento do Diário Oficial de Santos</title>
-<link rel="stylesheet" href="styles.css">
+<title>vigiAI — Seu nome no Diário Oficial de Santos, avisado na hora</title>
+<meta name="description" content="Ctrl+F em edital? Chega disso. O vigiAI lê o Diário Oficial de Santos toda noite e avisa quando seu nome e sua inscrição aparecem, com o que fazer e até quando.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f6f4ee" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f1624" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23ffe14d'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='19' font-style='italic' font-weight='700' text-anchor='middle' fill='%2314213d'%3EAI%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap">
+<link rel="stylesheet" href="landing.css">
 </head>
-<body>
-<header class="top"><div class="wrap"><div class="logo">📄 vigi<span>AI</span></div><a class="btn site-link" href="account.html">Começar agora</a></div></header>
+<body id="topo">
+<a class="lp-skip" href="#conteudo">Pular para o conteúdo</a>
 
-<main>
-<section><div class="wrap hero">
-  <div>
-    <h1>Pare de procurar. Nós monitoramos por você.</h1>
-    <p class="muted hero-intro">Informe seus dados, escolha o que deseja acompanhar e receba um alerta quando uma publicação relacionada aparecer no Diário Oficial de Santos.</p>
-    <div class="cta-row"><a class="btn" href="account.html">Criar conta</a><a class="btn ghost" href="#planos">Conhecer os planos</a></div>
-    <p class="muted sans hero-note">Já possui conta? <a href="account.html">Entre aqui</a>. Serviço independente, sem vínculo com a Prefeitura de Santos.</p>
+<header class="lp-header">
+  <div class="lp-wrap">
+    <a class="lp-logo" href="#topo" aria-label="vigiAI, início">vigi<span>AI</span></a>
+    <nav class="lp-nav" aria-label="Principal">
+      <a href="#como-funciona">Como funciona</a>
+      <a href="#preco">Preço</a>
+      <a class="lp-btn lp-btn--quiet" href="account.html">Entrar</a>
+      <a class="lp-btn" href="account.html#criar">Criar conta</a>
+    </nav>
   </div>
-  <div class="flow" aria-label="Fluxo do serviço">
-    <div class="node"><b>SEUS DADOS</b>Nome · CPF · Nascimento · Nº de inscrição</div><div class="arrow">↓</div>
-    <div class="node hl"><b>MONITORAMENTO AUTOMÁTICO</b>Sem consultas diárias da sua parte</div><div class="arrow">↓</div>
-    <div class="node"><b>DIÁRIO OFICIAL DE SANTOS</b>Novas edições verificadas</div><div class="arrow">↓</div>
-    <div class="node"><b>PUBLICAÇÃO ENCONTRADA</b>Ocorrência registrada</div><div class="arrow">↓</div>
-    <div class="node hl"><b>NOTIFICAÇÃO</b>Nos canais do seu plano</div>
-  </div>
-</div></section>
+</header>
 
-<section class="surface"><div class="wrap">
-  <h2>Como funciona</h2><p class="muted">Cadastre uma vez. O sistema faz o resto.</p>
-  <div class="grid4">
-    <div class="card"><div class="num">01</div><h3>Cadastre seus dados</h3><p class="muted">Informe nome, CPF, data de nascimento e número de inscrição.</p></div>
-    <div class="card"><div class="num">02</div><h3>Escolha o que acompanhar</h3><p class="muted">Cadastre o processo, concurso ou edital que deseja monitorar.</p></div>
-    <div class="card"><div class="num">03</div><h3>Escolha onde receber</h3><p class="muted">Selecione seus canais de comunicação de acordo com seu plano.</p></div>
-    <div class="card"><div class="num">04</div><h3>Nós monitoramos</h3><p class="muted">O sistema consulta as novas publicações e avisa quando encontrar uma ocorrência relacionada ao seu monitoramento.</p></div>
-  </div>
-  <div class="alert-wrap">
-    <div class="card alert sans">
-      <b>🔔 NOVA PUBLICAÇÃO ENCONTRADA</b>
-      <p class="muted alert-copy">Encontramos uma publicação relacionada ao seu monitoramento.</p>
-      <div class="k">Processo</div><div>Concurso Público X</div>
-      <div class="k">Inscrição</div><div>123456</div>
-      <div class="k">Tipo</div><div>Convocação</div>
-      <div class="k">Edição</div><div>12.345</div>
-      <div class="btn">Ver publicação</div>
+<main id="conteudo">
+  <section class="lp-hero">
+    <div class="lp-wrap">
+      <div>
+        <h1>Ctrl+F em edital? <em>Chega disso.</em></h1>
+        <p class="lp-lead">O vigiAI lê o Diário Oficial de Santos toda noite e avisa quando seu nome e sua inscrição aparecem, com o que fazer e até quando.</p>
+        <div class="lp-cta">
+          <a class="lp-btn lp-btn--big" href="account.html#criar">Criar conta</a>
+          <p class="lp-price-tag"><strong>R$ 4,99/mês</strong> · plano único</p>
+        </div>
+      </div>
+
+      <figure class="lp-figure" aria-label="Exemplo ilustrativo: uma linha de uma lista de convocados é grifada e o vigiAI envia o aviso">
+        <div class="lp-sheet">
+          <p class="lp-sheet__title">Convocação para as provas objetivas</p>
+          <ol class="lp-rows">
+            <li class="lp-row lp-row--head" aria-hidden="true"><span>Nº</span><span>Nome</span><span>Local</span><span>Sala</span></li>
+            <li class="lp-row"><span>31201</span><span>ALINE MARTINS DE SOUZA</span><span>COL. ALFA</span><span>204</span></li>
+            <li class="lp-row"><span>31202</span><span>BRUNO CÉSAR ALMEIDA</span><span>COL. ALFA</span><span>204</span></li>
+            <li class="lp-row lp-row--mark">
+              <span>31203</span><span>CARLA FERNANDES DUARTE</span><span>UNISANTA M</span><span>121</span>
+              <div class="lp-bubble" role="note">
+                <span class="lp-bubble__from">vigiAI · agora</span>
+                <strong>Você foi convocado.</strong>
+                <span>Prova em 18/10, Unisanta, Bloco M, sala 121.</span>
+              </div>
+            </li>
+            <li class="lp-row"><span>31204</span><span>DANIEL RIBEIRO PINTO</span><span>UNISANTA M</span><span>121</span></li>
+            <li class="lp-row"><span>31205</span><span>ELISA TAVARES MOURA</span><span>FAC. NORTE</span><span>017</span></li>
+            <li class="lp-row"><span>31206</span><span>FÁBIO HENRIQUE LOPES</span><span>FAC. NORTE</span><span>017</span></li>
+            <li class="lp-row"><span>31207</span><span>GABRIELA NUNES CAMPOS</span><span>COL. ALFA</span><span>110</span></li>
+          </ol>
+        </div>
+        <figcaption>Exemplo ilustrativo: nomes e números inventados.</figcaption>
+      </figure>
     </div>
-    <div class="alert-description"><h3>Um monitoramento = um processo</h3><p class="muted"><b>Cada monitoramento representa um processo, concurso ou edital que você deseja acompanhar.</b> O alerta prioriza o número de inscrição e os dados do processo; CPF e data de nascimento não aparecem nas notificações.</p></div>
-  </div>
-</div></section>
+  </section>
 
-<section id="planos"><div class="wrap">
-  <h2>Planos mensais</h2>
-  <p class="muted">Todos os canais estão disponíveis na plataforma, mas a quantidade que pode ser utilizada simultaneamente depende do plano.</p>
-  <div class="plans" id="planCards"></div>
-  <div class="tbl card card--table"><table id="planTable"></table></div>
-</div></section>
-
-<section class="surface account-access"><div class="wrap">
-  <div class="account-access__content">
-    <div>
-      <p class="eyebrow">Acesso ao vigiAI</p>
-      <h2>Escolha o plano e entre ou crie sua conta.</h2>
-      <p class="muted">O cadastro e o login ficam na página de conta, onde você também poderá configurar suas preferências de consentimento.</p>
+  <section class="lp-stats" aria-label="Números da edição de 09/10/2026">
+    <div class="lp-wrap">
+      <ul>
+        <li><strong>733</strong><span>páginas na edição de 09/10/2026 do Diário Oficial de Santos</span></li>
+        <li><strong>15.289</strong><span>candidatos convocados para prova, em 635 páginas de lista</span></li>
+        <li><strong>2.496</strong><span>fazem a prova na Unisanta</span></li>
+      </ul>
+      <p class="lp-source">Fonte: Diário Oficial de Santos, edição nº 9221 de 09/10/2026, Edital nº 149/2026.</p>
     </div>
-    <div class="cta-row"><a class="btn" href="account.html">Entrar ou criar conta</a></div>
-  </div>
-</div></section>
+  </section>
+
+  <section class="lp-section" id="como-funciona">
+    <div class="lp-wrap">
+      <p class="lp-eyebrow">Como funciona</p>
+      <h2>Você cadastra uma vez. A&nbsp;caneta amarela é nossa.</h2>
+      <ol class="lp-steps">
+        <li>
+          <h3>Cadastre nome e inscrição</h3>
+          <p>Informe seu nome completo e o número de cada inscrição que quer acompanhar, como <span class="lp-mono">20230</span>.</p>
+        </li>
+        <li>
+          <h3>Lemos o Diário toda noite</h3>
+          <p>Às 00h05, quando a nova edição sai, procuramos seu nome junto com cada inscrição.</p>
+        </li>
+        <li>
+          <h3>Você recebe o aviso</h3>
+          <p>Por e-mail ou WhatsApp, com o que fazer e até quando.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="lp-section" aria-labelledby="diferencial">
+    <div class="lp-wrap">
+      <p class="lp-eyebrow">Diferença</p>
+      <h2 id="diferencial">Não basta saber que saiu uma publicação.</h2>
+      <div class="lp-versus">
+        <div>
+          <p class="lp-versus__label">Outros serviços</p>
+          <p class="lp-versus__big">Saiu uma publicação.</p>
+        </div>
+        <div>
+          <p class="lp-versus__label">vigiAI</p>
+          <p class="lp-versus__big">Você foi convocado.</p>
+          <p class="lp-versus__detail">Prova em <span class="lp-mono">18/10</span>, Unisanta, Bloco M, sala 121. Leve documento com foto.</p>
+        </div>
+      </div>
+      <p class="lp-note">Exemplo ilustrativo com dados inventados.</p>
+    </div>
+  </section>
+
+  <section class="lp-section" id="preco" aria-labelledby="preco-titulo">
+    <div class="lp-wrap">
+      <div class="lp-price">
+        <div>
+          <p class="lp-eyebrow">Preço</p>
+          <h2 id="preco-titulo" class="lp-price__value">R$ 4,99<small>/mês</small></h2>
+          <p class="lp-price__sub">Plano único. Cancele quando quiser.</p>
+        </div>
+        <div>
+          <ul>
+            <li>Todas as suas inscrições</li>
+            <li>Leitura diária do Diário Oficial</li>
+            <li>Aviso por e-mail e WhatsApp</li>
+            <li>Histórico de leituras</li>
+          </ul>
+          <a class="lp-btn lp-btn--big" href="account.html#criar">Criar conta</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="lp-section" id="perguntas" aria-labelledby="perguntas-titulo">
+    <div class="lp-wrap">
+      <p class="lp-eyebrow">Perguntas rápidas</p>
+      <h2 id="perguntas-titulo">O que mais perguntam.</h2>
+      <div class="lp-faq">
+        <details>
+          <summary>Por que pedem o número de inscrição?</summary>
+          <p>Porque só o nome não basta. Na lista de 09/10, 99 nomes aparecem mais de uma vez, com inscrições diferentes: são pessoas inscritas em dois cargos e homônimos. O vigiAI só avisa quando nome e inscrição aparecem juntos.</p>
+        </details>
+        <details>
+          <summary>Vocês são da Prefeitura?</summary>
+          <p>Não. O vigiAI é um serviço independente, sem vínculo com a Prefeitura de Santos. Lemos o Diário Oficial porque ele é público.</p>
+        </details>
+        <details>
+          <summary>E os meus dados?</summary>
+          <p>Guardamos só seu nome, seu e-mail e as inscrições que você cadastrar (e o telefone, se você escolher receber por WhatsApp). Você pode excluir a conta quando quiser, e tudo vai junto: inscrições, histórico e assinatura.</p>
+        </details>
+      </div>
+    </div>
+  </section>
 </main>
 
-<footer class="footer"><div class="wrap">O vigiAI é um serviço independente e não pertence nem é afiliado à Prefeitura de Santos. A detecção depende do conteúdo publicado e não é garantida em 100% dos casos.</div></footer>
-
-<script src="agent-contract.js"></script>
-<script src="script.js"></script>
+<footer class="lp-footer">
+  <div class="lp-wrap">
+    <p>O vigiAI é um serviço independente e não pertence nem é afiliado à Prefeitura de Santos.</p>
+    <p>A detecção depende do que é publicado no Diário Oficial e não é garantida em todos os casos.</p>
+  </div>
+</footer>
 </body>
 </html>

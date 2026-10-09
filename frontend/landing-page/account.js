@@ -190,6 +190,9 @@
     }
   }
 
+  // A landing leva "Criar conta" para account.html#criar.
+  if (window.location.hash === "#criar") setActiveTab("signup");
+
   tabs.forEach(tab => tab.addEventListener("click", () => setActiveTab(tab.dataset.authTab)));
   loginForm.addEventListener("submit", login);
   signupForm.addEventListener("submit", signup);

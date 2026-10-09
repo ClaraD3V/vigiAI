@@ -38,7 +38,7 @@
 
     <section class="portal-section" id="tab-execucoes" data-section="execucoes" hidden>
       <h1>Execuções</h1>
-      <p class="portal-empty">Cada noite em que o agente ler o Diário Oficial aparecerá aqui, com o resultado.</p>
+      <div id="exeRoot"><p class="portal-empty">Carregando…</p></div>
     </section>
 
     <section class="portal-section" id="tab-assinatura" data-section="assinatura" hidden>
@@ -57,8 +57,11 @@
 <script src="supabase-env.js"></script>
 <script src="supabase-config.js"></script>
 <script src="portal-logic.js"></script>
+<script src="dom-helpers.js"></script>
 <script src="subscription-logic.js"></script>
 <script src="assinatura.js"></script>
+<script src="executions-logic.js"></script>
+<script src="execucoes.js"></script>
 <script src="portal.js"></script>
 </body>
 </html>
