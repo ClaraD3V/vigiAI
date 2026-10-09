@@ -39,6 +39,10 @@ resultado, nomeação) — com o que fazer e o prazo.
   lógica para JS puro.
 - Supabase JS v2 via CDN (`https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2`).
 - No navegador, apenas URL + chave **publicável**. Nunca `service_role` no front.
+- A URL e a chave ficam em `supabase-env.js`; `supabase-config.js` só cria o client. **Toda
+  página nova que usa o Supabase deve carregar os scripts nesta ordem**: supabase-js (CDN),
+  `supabase-env.js`, `supabase-config.js` e só depois os scripts da página. Fora dessa
+  ordem o client vem `null`.
 - Tabelas e colunas em **português, sem acento** (`inscricoes`, `usuario_id`, `criado_em`).
 - Senha nunca vai para tabela pública: só `supabase.auth.signUp / signInWithPassword /
   updateUser`.
@@ -199,9 +203,9 @@ banca.
 
 1. [ ] **Revisar e aplicar a migration** `20261009030000_plataforma_portal.sql` no
    Supabase (combinar com o time; ela é aditiva).
-2. [ ] **Configuração do Supabase no front**: `frontend/landing-page/supabase-config.js`
-   (já pronto, com URL + chave publicável). Conferir que todas as páginas carregam o
-   CDN do supabase-js antes dele.
+2. [ ] **Configuração do Supabase no front**: `supabase-env.js` (URL + chave publicável) e
+   `supabase-config.js` (client), já na main. Conferir que todas as páginas carregam os
+   scripts na ordem da seção 3.
 3. [ ] **Cadastro/Login** (`account.html`, `account.js`, `account-auth.js`): remover
    CPF/data de nascimento/checkboxes antigos; nome, e-mail, senha, confirmação com as
    regras da presença; após cadastro → `consentimento.html`; após login → roteamento
