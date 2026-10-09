@@ -12,11 +12,11 @@
   <section class="auth-shell wrap">
     <div class="auth-hero">
       <p class="eyebrow">Sua conta vigiAI</p>
-      <h1>Monitore processos e receba alertas em segurança.</h1>
-      <p class="muted">Entre com sua conta ou crie uma nova para gerenciar seus monitoramentos, preferências e dados pessoais.</p>
+      <h1>Seu nome no Diário Oficial, avisado na hora.</h1>
+      <p class="muted">Entre ou crie sua conta para cadastrar suas inscrições de concurso e receber o aviso quando você for encontrado.</p>
       <div class="auth-benefits">
         <span>🔒 Acesso protegido</span>
-        <span>📧 Alertas personalizados</span>
+        <span>📧 Avisos por e-mail e WhatsApp</span>
         <span>🛡️ Controle dos seus dados</span>
       </div>
     </div>
@@ -61,37 +61,19 @@
             <div class="err" data-error="signupEmail"></div>
           </div>
           <div class="field">
-            <label for="cpf">CPF</label>
-            <input id="cpf" name="cpf" type="text" maxlength="14" inputmode="numeric" autocomplete="off" required>
-            <div class="err" data-error="cpf"></div>
-          </div>
-          <div class="field">
-            <label for="birthDate">Data de nascimento</label>
-            <input id="birthDate" name="birthDate" type="date" autocomplete="bday" required>
-            <div class="err" data-error="birthDate"></div>
-          </div>
-          <div class="field">
             <label for="password">Senha</label>
-            <input id="password" name="password" type="password" autocomplete="new-password" minlength="8" required>
+            <input id="password" name="password" type="password" autocomplete="new-password" minlength="8" aria-describedby="passwordHelp" required>
+            <ul id="passwordHelp" class="pw-checklist" hidden></ul>
             <div class="err" data-error="password"></div>
           </div>
           <div class="field">
             <label for="confirmPassword">Confirmar senha</label>
-            <input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" required>
+            <input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" aria-describedby="confirmState" required>
+            <p id="confirmState" class="pw-state" hidden></p>
             <div class="err" data-error="confirmPassword"></div>
           </div>
 
-          <section class="consent-box">
-            <h3>Consentimento de dados</h3>
-            <label class="consent-option"><input type="checkbox" name="processing" data-consent="processing"> <span>Processamento necessário para oferecer o serviço de monitoramento.</span></label>
-            <label class="consent-option"><input type="checkbox" name="alerts" data-consent="alerts"> <span>Envio de alertas e avisos sobre os monitoramentos.</span></label>
-            <label class="consent-option"><input type="checkbox" name="marketing" data-consent="marketing"> <span>Comunicados de produtos, campanhas e novidades.</span></label>
-            <label class="consent-option"><input type="checkbox" name="terms" data-consent="terms"> <span>Li e aceito os <a href="#">termos de uso</a> e a <a href="#">política de privacidade</a>.</span></label>
-            <div class="err" data-error="consent"></div>
-            <p class="consent-help">Você pode retirar o consentimento de alertas ou marketing a qualquer momento na área de conta.</p>
-          </section>
-
-          <button class="btn auth-submit" type="submit">Criar conta</button>
+          <button class="btn auth-submit" id="signupSubmit" type="submit" disabled>Criar conta</button>
         </form>
       </div>
 

@@ -630,6 +630,85 @@ input:focus {
   margin: 12px 0 0;
 }
 
+.consent-shell {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.consent-scroll {
+  max-height: 340px;
+  overflow-y: auto;
+  margin: 16px 0;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--bg);
+  font: 0.9rem/1.55 system-ui;
+}
+
+.consent-scroll h3 {
+  font-size: 0.95rem;
+  margin: 14px 0 4px;
+}
+
+.consent-scroll h3:first-child {
+  margin-top: 0;
+}
+
+.consent-scroll p,
+.consent-scroll ul {
+  margin: 0 0 8px;
+}
+
+.consent-scroll ul {
+  padding-left: 20px;
+}
+
+.consent-option input:disabled + span {
+  opacity: 0.55;
+}
+
+.pw-checklist {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+  font: 0.84rem system-ui;
+}
+
+.pw-checklist li {
+  color: var(--muted);
+}
+
+.pw-checklist li::before {
+  content: "✗ ";
+}
+
+.pw-checklist li.ok {
+  color: var(--ok);
+}
+
+.pw-checklist li.ok::before {
+  content: "✓ ";
+}
+
+.pw-state {
+  margin: 4px 0 0;
+  font: 0.84rem system-ui;
+}
+
+.pw-state.ok {
+  color: var(--ok);
+}
+
+.pw-state.bad {
+  color: var(--warn);
+}
+
+.auth-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .auth-links {
   text-align: center;
   margin: 16px 0 0;
