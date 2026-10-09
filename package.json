@@ -1,0 +1,24 @@
+{
+  "name": "vigiai",
+  "version": "1.0.0",
+  "description": "vigiAI — Monitoramento Inteligente de Publicações e Diários Oficiais",
+  "private": true,
+  "license": "MIT",
+  "workspaces": [
+    "agent",
+    "frontend",
+    "shared"
+  ],
+  "scripts": {
+    "dev": "turbo run dev --parallel",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "type-check": "turbo run type-check",
+    "lint": "turbo run lint",
+    "clean": "turbo clean && rm -rf node_modules"
+  },
+  "devDependencies": {
+    "turbo": "^2.0.0",
+    "typescript": "^5.3.3"
+  }
+}
