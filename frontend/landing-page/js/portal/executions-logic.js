@@ -24,6 +24,12 @@
     return `${p.day}/${p.month} às ${p.hour}h${p.minute}`;
   }
 
+  // "2026-10-09T03:05:00Z" -> "00h05"
+  function formatRunTime(iso) {
+    const p = parts(iso, { hour: "2-digit", minute: "2-digit" });
+    return `${p.hour}h${p.minute}`;
+  }
+
   // "2026-10-09T03:05:00Z" -> "09/10/2026"
   function formatDay(iso) {
     const p = parts(iso, { day: "2-digit", month: "2-digit", year: "numeric" });
@@ -192,6 +198,7 @@
 
   const api = {
     formatRunDate,
+    formatRunTime,
     formatDay,
     dayKey,
     nextReadingAt,

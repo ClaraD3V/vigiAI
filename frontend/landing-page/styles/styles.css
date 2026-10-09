@@ -9,6 +9,12 @@
   --warn: #a4401a;
   --ok: #1f7a4d;
   --soft: #e6f1ef;
+  --mark: #ffe14d;
+  --mark-ink: #14213d;
+  /* Mesmas três fontes da landing; o portal as usa (carregadas em portal.html). */
+  --serif: "Newsreader", Georgia, "Times New Roman", serif;
+  --sans: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
   box-sizing: border-box;
   padding-top: env(safe-area-inset-top, 0px);
   padding-bottom: env(safe-area-inset-bottom, 0px);
@@ -770,6 +776,37 @@ input:focus {
 .portal-page {
   background: var(--bg);
   color: var(--ink);
+  font: 400 1rem/1.55 var(--sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Títulos em Newsreader, tudo mais em Instrument Sans, números de inscrição em IBM Plex Mono. */
+.portal-page h1,
+.portal-page h2,
+.portal-page h3 {
+  font-family: var(--serif);
+  font-weight: 500;
+}
+
+.portal-page button,
+.portal-page input,
+.portal-page select,
+.portal-page label,
+.portal-page table,
+.portal-page .logo,
+.portal-page .msg,
+.portal-page .note {
+  font-family: var(--sans);
+}
+
+.portal-page .logo {
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  font-weight: 600;
+}
+
+.portal-page .mono {
+  font-family: var(--mono);
 }
 
 .portal-status,
@@ -778,7 +815,7 @@ input:focus {
   margin: 20vh auto 0;
   padding: 0 16px;
   text-align: center;
-  font: 1rem system-ui;
+  font: 1rem var(--sans);
   color: var(--muted);
 }
 
@@ -790,6 +827,7 @@ input:focus {
   display: grid;
   grid-template-columns: 1fr;
   min-height: 100vh;
+  align-content: start;
 }
 
 /* Celular: marca + Sair na linha de cima, nome embaixo, abas na última linha. */
@@ -817,7 +855,7 @@ input:focus {
 .portal-user {
   grid-area: user;
   margin: 0;
-  font: 0.88rem system-ui;
+  font: 0.88rem var(--sans);
   color: var(--muted);
 }
 
@@ -832,7 +870,7 @@ input:focus {
   border-radius: 8px;
   background: transparent;
   color: var(--ink);
-  font: 0.9rem system-ui;
+  font: 0.9rem var(--sans);
   cursor: pointer;
 }
 
@@ -854,7 +892,7 @@ input:focus {
   padding: 10px 12px;
   border-bottom: 3px solid transparent;
   color: var(--muted);
-  font: 600 0.92rem system-ui;
+  font: 600 0.92rem var(--sans);
   text-decoration: none;
 }
 
@@ -885,8 +923,9 @@ input:focus {
 }
 
 .portal-main h1 {
-  margin: 0 0 12px;
-  font-size: 1.6rem;
+  margin: 0 0 20px;
+  font-size: clamp(1.75rem, 4vw, 2.1rem);
+  line-height: 1.15;
 }
 
 .portal-lock {
@@ -894,7 +933,7 @@ input:focus {
   padding: 12px 14px;
   border-left: 4px solid var(--warn);
   background: var(--surface);
-  font: 0.92rem system-ui;
+  font: 0.92rem var(--sans);
 }
 
 .portal-empty {
@@ -902,13 +941,14 @@ input:focus {
   padding: 28px 0;
   border-top: 1px solid var(--line);
   color: var(--muted);
-  font: 0.95rem/1.5 system-ui;
+  font: 0.95rem/1.5 var(--sans);
 }
 
 /* Desktop: menu lateral fixo à esquerda, Sair no rodapé do menu. */
 @media (min-width: 800px) {
   .portal {
     grid-template-columns: 240px 1fr;
+    align-content: stretch;
   }
 
   .portal-side {
@@ -970,7 +1010,7 @@ input:focus {
   list-style: none;
   margin: 0 0 20px;
   padding: 0;
-  font: 600 0.88rem system-ui;
+  font: 600 0.88rem var(--sans);
   overflow-x: auto;
 }
 
@@ -1018,7 +1058,7 @@ input:focus {
 
 .sub-price {
   margin: 0 0 12px;
-  font: 1rem system-ui;
+  font: 1rem var(--sans);
 }
 
 .sub-price strong {
@@ -1028,13 +1068,13 @@ input:focus {
 .sub-list {
   margin: 0 0 8px;
   padding-left: 20px;
-  font: 0.95rem/1.6 system-ui;
+  font: 0.95rem/1.6 var(--sans);
 }
 
 .sub-hint {
   margin: 0 0 10px;
   color: var(--muted);
-  font: 0.85rem system-ui;
+  font: 0.85rem var(--sans);
 }
 
 .sub-actions {
@@ -1066,7 +1106,7 @@ input:focus {
 }
 
 .sub-row--head {
-  font: 600 0.78rem system-ui;
+  font: 600 0.78rem var(--sans);
   color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -1084,7 +1124,7 @@ input:focus {
 
 .sub-channels legend {
   padding: 0;
-  font: 600 0.9rem system-ui;
+  font: 600 0.9rem var(--sans);
 }
 
 select {
@@ -1102,7 +1142,7 @@ select {
   grid-template-columns: max-content 1fr;
   gap: 6px 16px;
   margin: 0 0 20px;
-  font: 0.95rem system-ui;
+  font: 0.95rem var(--sans);
 }
 
 .sub-summary dt {
@@ -1131,11 +1171,11 @@ select {
   border-radius: 14px;
   background: var(--ink);
   color: var(--bg);
-  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-family: var(--mono);
 }
 
 .sub-card__brand {
-  font: 600 0.9rem system-ui;
+  font: 600 0.9rem var(--sans);
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
@@ -1161,7 +1201,7 @@ select {
 .sub-demo {
   margin: 10px 0 0;
   color: var(--muted);
-  font: 0.78rem/1.4 system-ui;
+  font: 0.78rem/1.4 var(--sans);
 }
 
 .sub-dialog {
@@ -1302,7 +1342,7 @@ select {
 
 .exe-toolbar .muted {
   margin: 0;
-  font: 0.88rem system-ui;
+  font: 0.88rem var(--sans);
 }
 
 .exe-list {
@@ -1321,12 +1361,12 @@ select {
 
 .exe-when {
   color: var(--muted);
-  font: 600 0.88rem system-ui;
+  font: 600 0.88rem var(--sans);
 }
 
 .exe-summary {
   margin: 0;
-  font: 0.98rem/1.5 system-ui;
+  font: 0.98rem/1.5 var(--sans);
 }
 
 .exe-item.has-found .exe-summary {
@@ -1336,7 +1376,7 @@ select {
 .exe-warn {
   margin: 6px 0 0;
   color: var(--muted);
-  font: 0.82rem system-ui;
+  font: 0.82rem var(--sans);
 }
 
 .exe-found {
@@ -1361,14 +1401,14 @@ select {
   border-radius: 999px;
   background: var(--ok);
   color: var(--bg);
-  font: 700 0.78rem system-ui;
+  font: 700 0.78rem var(--sans);
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 
 .exe-meta {
   color: var(--muted);
-  font: 600 0.88rem system-ui;
+  font: 600 0.88rem var(--sans);
 }
 
 .exe-found h3 {
@@ -1382,12 +1422,12 @@ select {
   padding: 2px 0 2px 12px;
   border-left: 3px solid var(--line);
   color: var(--ink);
-  font: 0.9rem/1.5 system-ui;
+  font: 0.9rem/1.5 var(--sans);
 }
 
 .exe-deadline {
   margin: 8px 0 12px;
-  font: 0.95rem system-ui;
+  font: 0.95rem var(--sans);
 }
 
 .exe-possible {
@@ -1395,7 +1435,7 @@ select {
   padding: 10px 14px;
   border: 1.5px dashed var(--line);
   border-radius: 10px;
-  font: 0.9rem system-ui;
+  font: 0.9rem var(--sans);
 }
 
 .exe-possible__label {
@@ -1412,7 +1452,7 @@ select {
   padding: 24px 0;
   border-top: 1px solid var(--line);
   max-width: 560px;
-  font: 0.95rem/1.6 system-ui;
+  font: 0.95rem/1.6 var(--sans);
 }
 
 .exe-empty h2 {
@@ -1423,5 +1463,138 @@ select {
 @media (min-width: 800px) {
   .exe-item {
     grid-template-columns: 130px 1fr;
+  }
+}
+
+/* ---------- Início (resumo) ---------- */
+
+.home-status {
+  margin: 0 0 24px;
+  padding: 0 0 24px;
+  border-bottom: 1px solid var(--line);
+}
+
+.home-status__text {
+  margin: 0;
+  max-width: 34ch;
+  font: 500 clamp(1.6rem, 5vw, 2.5rem)/1.18 var(--serif);
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+.home-status__detail {
+  margin: 10px 0 0;
+  font: 500 1rem/1.5 var(--sans);
+}
+
+.home-status__link {
+  display: inline-block;
+  margin-top: 12px;
+  font: 600 0.95rem var(--sans);
+  color: var(--accent);
+}
+
+.home-status__note {
+  margin: 14px 0 0;
+  color: var(--muted);
+  font: 0.88rem/1.45 var(--sans);
+}
+
+/* Achado: o marca-texto da landing, sempre com tinta escura por cima. */
+.home-status--found,
+.home-status--possible {
+  padding: 22px 22px 20px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--mark);
+  color: var(--mark-ink);
+}
+
+.home-status--found .home-status__link,
+.home-status--possible .home-status__link {
+  color: var(--mark-ink);
+  font-weight: 700;
+}
+
+.home-status--found .home-status__note,
+.home-status--possible .home-status__note {
+  color: var(--mark-ink);
+}
+
+.home-notice {
+  margin: 0 0 24px;
+  padding: 12px 14px;
+  border-left: 4px solid var(--warn);
+  background: var(--surface);
+  font: 0.95rem/1.5 var(--sans);
+}
+
+.home-notice--overdue {
+  font-weight: 600;
+}
+
+.home-facts {
+  margin: 0;
+}
+
+.home-fact {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4px 24px;
+  padding: 16px 0;
+  border-top: 1px solid var(--line);
+}
+
+.home-fact:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.home-fact dt {
+  color: var(--muted);
+  font: 600 0.78rem var(--sans);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.home-fact dd {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  margin: 0;
+  font: 500 1.02rem/1.5 var(--sans);
+}
+
+.home-numbers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.home-numbers li {
+  padding: 3px 10px;
+  border-radius: 6px;
+  background: var(--soft);
+  font-size: 0.95rem;
+}
+
+.home-numbers .home-more {
+  background: none;
+  color: var(--muted);
+  font-family: var(--mono);
+}
+
+.home-fact__link {
+  font: 600 0.9rem var(--sans);
+}
+
+@media (min-width: 800px) {
+  .home-fact {
+    grid-template-columns: 200px 1fr;
+    align-items: baseline;
   }
 }

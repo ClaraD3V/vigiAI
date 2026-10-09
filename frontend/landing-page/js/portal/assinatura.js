@@ -74,7 +74,7 @@
         ...rows.map((row, index) => {
           const rowErrors = errors[index] || {};
           const numero = h("input", {
-            type: "text", value: row.numero, placeholder: "20230", autocomplete: "off",
+            type: "text", class: "mono", value: row.numero, placeholder: "20230", autocomplete: "off",
             maxlength: "30", "aria-label": `Número da inscrição ${index + 1}`,
             oninput: event => { row.numero = event.target.value; }
           });

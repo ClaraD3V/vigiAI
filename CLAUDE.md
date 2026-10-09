@@ -228,11 +228,8 @@ banca.
 6. [x] **Assinatura**: wizard obrigatório no 1º acesso (plano → inscrições →
    envio → pagamento simulado) e modo de gerenciamento depois.
 7. [x] **Execuções**: linha do tempo lendo `agent_daily_runs` e `agent_match_results`.
-8. [ ] **Início** ← **PRÓXIMA TAREFA.** Resumo (fatura, inscrições, última/próxima
-   leitura). A seção `#tab-inicio` do `portal.html` ainda é um marcador. Escutar
-   `portal:access` (seção 10) e reutilizar `executions-logic.js` (`formatRunDate`,
-   `nextReadingAt`, `buildTimeline`). Mostrar o plano de trabalho ao Vilela antes de codar.
-9. [ ] **Meu perfil**: dados + excluir conta via RPC (`#tab-perfil` é um marcador).
+8. [x] **Início** (concluída): frase de status, inscrições vigiadas, próxima leitura e assinatura; aviso de fatura só com 5 dias ou menos. Ver seção 10.
+9. [ ] **Meu perfil** ← **PRÓXIMA TAREFA.** Dados + excluir conta via RPC (`#tab-perfil` é um marcador).
 10. [x] **Landing** (concluída). **Retoques pendentes:** (a) esmaecer as linhas da lista do
     Diário cobertas pelo aviso do vigiAI no topo; (b) reduzir o vazio entre as seções
     "Diferença" e "Preço" no desktop.
@@ -267,8 +264,8 @@ banca.
 
 ## 10. Estado atual e como retomar (atualizado em 09/10/2026)
 
-**Estado:** tarefas 1 a 7 e 10 concluídas; **próxima: tarefa 8 (Início)**; depois 9, 11, 12.
-Tudo está na `main` (e na `feature/plataforma`). 68 testes: `node --test frontend/landing-page/*.test.js`.
+**Estado:** tarefas 1 a 8 e 10 concluídas; **próxima: tarefa 9 (Meu perfil)**; depois 11, 12.
+Tudo está na `main` (e na `feature/plataforma`). 93 testes: `node --test frontend/landing-page/*.test.js`.
 
 ### Como trabalhar com o Vilela
 - Mostrar o **plano antes de escrever código** em cada tarefa e esperar o ok.
@@ -295,6 +292,9 @@ Tudo está na `main` (e na `feature/plataforma`). 68 testes: `node --test fronte
   aba Assinatura.
 - **Assinatura:** `assinatura.js` + `subscription-logic.js` (wizard Plano → Inscrições →
   Envio → Pagamento e modo gerenciar). **Execuções:** `execucoes.js` + `executions-logic.js`.
+- **Início:** `inicio.js` + `home-logic.js` (lógica pura: `buildHomeSummary`, `buildStatus`, `buildBilling`, `watchedInscricoes`). Uma consulta própria (última leitura, resultados, inscrições ativas); cartão e preço do plano vêm do `portal:access` (o select de `loadAccess` agora traz `pagamento_bandeira`, `pagamento_final` e `planos(nome, preco)`). Só carrega ao abrir `#inicio`. Mostra o horário real de `run_at`; "próxima leitura" é o 00h05 nominal.
+- **Fontes do portal:** Newsreader, Instrument Sans e IBM Plex Mono em todas as abas (tokens `--serif/--sans/--mono` em `styles.css`, carregadas pelo `portal.html`). Número de inscrição usa a classe `.mono`. `account` e `consentimento` ainda usam as fontes do sistema.
+- **Armadilha:** `replaceChildren(..., null)` escreve a palavra "null" na tela; filtrar nulos antes (`.filter(Boolean)`).
 - **`dom-helpers.js`:** expõe `h(tag, props, ...filhos)` global, para montar DOM sem
   `innerHTML` (dados do usuário entram como texto). Carregar antes dos módulos de aba.
 - Ordem dos scripts no `portal.html`: supabase-js, `supabase-env.js`, `supabase-config.js`,

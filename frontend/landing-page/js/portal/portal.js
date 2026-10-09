@@ -27,7 +27,9 @@
     const userId = session.user.id;
     const [perfilResult, assinaturaResult] = await Promise.all([
       authClient.from("perfis").select("nome_completo, consentimento_aceito_em").eq("id", userId).maybeSingle(),
-      authClient.from("assinaturas").select("status, expira_em, iniciada_em")
+      // Cartão e plano vêm no mesmo select para a aba Início não repetir a consulta.
+      authClient.from("assinaturas")
+        .select("status, expira_em, iniciada_em, pagamento_bandeira, pagamento_final, planos(nome, preco)")
         .eq("usuario_id", userId).order("iniciada_em", { ascending: false }).limit(1).maybeSingle()
     ]);
     if (perfilResult.error) throw perfilResult.error;
