@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Portal | vigiAI</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="auth-page">
+<!-- PROVISÓRIO: substituído pelo portal real na tarefa 5 do CLAUDE.md. -->
+<header class="top"><div class="wrap"><div class="logo">📄 vigi<span>AI</span></div><button class="btn site-link ghost" id="logoutButton" type="button">Sair</button></div></header>
+<main class="auth-main">
+  <section class="wrap consent-shell">
+    <div class="auth-card">
+      <h2>Portal em construção</h2>
+      <p class="muted">Sua conta está pronta. Esta área será liberada em breve.</p>
+    </div>
+  </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-env.js"></script>
+<script src="supabase-config.js"></script>
+<script>
+  document.querySelector("#logoutButton").addEventListener("click", async () => {
+    const client = globalThis.vigiAISupabase && globalThis.vigiAISupabase.client;
+    if (client) await client.auth.signOut();
+    window.location.assign("account.html");
+  });
+</script>
+</body>
+</html>
