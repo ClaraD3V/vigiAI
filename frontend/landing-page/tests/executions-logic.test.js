@@ -1,6 +1,6 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const E = require("./executions-logic");
+const E = require("../js/portal/executions-logic");
 
 // 00h05 de São Paulo = 03h05 UTC.
 const run = (id, day, extra = {}) => ({

@@ -1,6 +1,6 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const { buildAgentPayload } = require("./agent-contract.js");
+const { buildAgentPayload } = require("../js/shared/agent-contract.js");
 
 test("constrói exatamente o contrato esperado pelo agente", () => {
   const payload = buildAgentPayload({

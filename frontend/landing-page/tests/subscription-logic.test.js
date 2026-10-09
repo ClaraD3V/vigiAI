@@ -1,6 +1,6 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const S = require("./subscription-logic");
+const S = require("../js/portal/subscription-logic");
 
 const agora = new Date(2026, 9, 9, 12, 0, 0); // 09/10/2026
 

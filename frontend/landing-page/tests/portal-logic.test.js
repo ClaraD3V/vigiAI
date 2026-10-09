@@ -6,7 +6,7 @@ const {
   resolveGuard,
   resolveTab,
   firstName
-} = require("./portal-logic");
+} = require("../js/portal/portal-logic");
 
 const agora = new Date("2026-10-09T12:00:00Z");
 const session = { user: { id: "u1" } };

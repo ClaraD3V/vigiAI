@@ -1,6 +1,6 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const { CONSENT_VERSION, isScrolledToEnd, buildConsentUpdate } = require("./consent");
+const { CONSENT_VERSION, isScrolledToEnd, buildConsentUpdate } = require("../js/auth/consent");
 
 test("só considera lido quando a rolagem chega ao fim", () => {
   assert.equal(isScrolledToEnd({ scrollTop: 0, scrollHeight: 1000, clientHeight: 200 }), false);

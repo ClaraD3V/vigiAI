@@ -7,7 +7,7 @@ const {
   buildAccountRegistration,
   translateAuthError,
   resolvePostLoginRoute
-} = require("./account-auth");
+} = require("../js/auth/account-auth");
 
 const valido = {
   fullName: "Maria Silva",
