@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Consentimento | vigiAI</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="auth-page">
+<header class="top"><div class="wrap"><div class="logo">📄 vigi<span>AI</span></div><button class="btn site-link ghost" id="logoutButton" type="button">Sair</button></div></header>
+<main class="auth-main">
+  <section class="wrap consent-shell">
+    <div class="auth-card" aria-live="polite">
+      <h2>Antes de começar</h2>
+      <p class="muted">Leia o texto abaixo até o fim para liberar o aceite.</p>
+
+      <div class="consent-scroll" id="consentText" tabindex="0" role="region" aria-label="Termo de consentimento">
+        <h3>1. Quem somos</h3>
+        <p>O vigiAI é um serviço independente que avisa candidatos de concursos quando o nome e a inscrição deles aparecem no Diário Oficial de Santos. Não somos afiliados à Prefeitura de Santos.</p>
+
+        <h3>2. Dados que coletamos</h3>
+        <ul>
+          <li><strong>Dados pessoais:</strong> seu nome completo e seu e-mail.</li>
+          <li><strong>Números de inscrição:</strong> os que você cadastrar, com a descrição opcional (por exemplo, o cargo).</li>
+          <li><strong>Contato para avisos:</strong> o telefone com DDD, se você escolher receber por WhatsApp.</li>
+        </ul>
+
+        <h3>3. Como usamos esses dados</h3>
+        <ul>
+          <li>Todas as noites, um agente lê as publicações públicas do Diário Oficial de Santos e procura pelo seu nome junto com o número de inscrição, na mesma linha.</li>
+          <li>Se você for encontrado, enviamos um aviso pelos canais que escolher (e-mail e/ou WhatsApp), com o tipo da publicação, o que fazer e o prazo.</li>
+          <li>Guardamos o histórico das leituras e dos resultados para mostrar na sua área do portal.</li>
+        </ul>
+
+        <h3>4. Pagamento</h3>
+        <p>Nesta versão a tela de pagamento é uma simulação. O número do cartão <strong>não é armazenado</strong>: guardamos apenas a bandeira, os quatro últimos dígitos e o nome do titular, para exibir sua assinatura.</p>
+
+        <h3>5. O que não coletamos</h3>
+        <p>Não usamos câmera, biometria nem geolocalização.</p>
+
+        <h3>6. Retenção e exclusão</h3>
+        <p>Mantemos seus dados enquanto sua conta existir. Você pode excluir a conta a qualquer momento em “Meu perfil”: ao fazer isso, apagamos junto suas inscrições, o histórico de leituras, as preferências e a assinatura.</p>
+
+        <h3>7. Seus direitos (LGPD)</h3>
+        <p>Pela Lei Geral de Proteção de Dados (Lei nº 13.709/2018), você pode confirmar que tratamos seus dados, acessá-los, corrigi-los, pedir a exclusão e revogar este consentimento. As publicações lidas são públicas; o tratamento dos seus dados pessoais depende deste aceite.</p>
+
+        <h3>8. Aceite</h3>
+        <p>Ao aceitar, você declara que leu e concorda com o uso dos seus dados nos termos acima.</p>
+      </div>
+
+      <label class="consent-option"><input type="checkbox" id="consentCheck" disabled> <span>Li e concordo com o uso dos meus dados conforme descrito acima.</span></label>
+      <button class="btn auth-submit" id="consentSubmit" type="button" disabled>Aceitar e continuar</button>
+
+      <div id="consentMessage" class="msg" role="status" aria-live="polite" hidden></div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer"><div class="wrap">O vigiAI é um serviço independente e não pertence nem é afiliado à Prefeitura de Santos.</div></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="consent.js"></script>
+<script src="consentimento.js"></script>
+</body>
+</html>
