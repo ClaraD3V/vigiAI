@@ -54,17 +54,17 @@ resultado, nomeação) — com o que fazer e o prazo.
 - Projeto: `vigiAI`, ref `hrrgfecztjgpyekncfcs`, região sa-east-1.
 - URL: `https://hrrgfecztjgpyekncfcs.supabase.co`
 - Chave publicável: `sb_publishable_DpF8c6vimcz4lQsQZrDuVg_HJzo3ty3`
-- Hoje o banco tem só o schema inicial (`perfis`, `planos`, `assinaturas`,
-  `perfis_candidatos`, `monitoramentos`, `canais_notificacao`, ...). Tudo vazio
-  exceto 3 planos antigos.
+- O banco tem o schema inicial (`perfis`, `planos`, `assinaturas`, `perfis_candidatos`,
+  `monitoramentos`, `canais_notificacao`, ...) mais a migration do portal (abaixo) e a de
+  permissões, ambas **já aplicadas**.
 - **GRANT explícito em toda tabela nova.** O projeto foi criado sem os GRANTs padrão para
   `anon`/`authenticated`/`service_role`: sem GRANT a consulta falha com "permission denied"
   antes de o RLS ser avaliado. Toda migration que cria tabela deve trazer, além do RLS, o
   `grant` para `authenticated` (só o necessário) e para `service_role`. Base:
   `backend/supabase/migrations/20261009073000_permissoes_api.sql`.
-- **Migration nova, ainda NÃO aplicada:**
+- **Migration do portal, já aplicada:**
   `backend/supabase/migrations/20261009030000_plataforma_portal.sql`. É aditiva (não
-  apaga nada). Revisar com o time antes de aplicar. Ela cria:
+  apaga nada). Ela cria:
   - `perfis.consentimento_aceito_em` / `consentimento_versao`
   - plano único `vigiai` a **R$ 4,99/mês** (os antigos ficam `ativo = false`)
   - `assinaturas.pagamento_bandeira / pagamento_final / pagamento_titular` (exibição
@@ -206,18 +206,18 @@ banca.
 
 ## 8. Tarefas, em ordem
 
-1. [ ] **Revisar e aplicar a migration** `20261009030000_plataforma_portal.sql` no
+1. [x] **Revisar e aplicar a migration** `20261009030000_plataforma_portal.sql` no
    Supabase (combinar com o time; ela é aditiva).
-2. [ ] **Configuração do Supabase no front**: `supabase-env.js` (URL + chave publicável) e
+2. [x] **Configuração do Supabase no front**: `supabase-env.js` (URL + chave publicável) e
    `supabase-config.js` (client), já na main. Conferir que todas as páginas carregam os
    scripts na ordem da seção 3.
-3. [ ] **Cadastro/Login** (`account.html`, `account.js`, `account-auth.js`): remover
+3. [x] **Cadastro/Login** (`account.html`, `account.js`, `account-auth.js`): remover
    CPF/data de nascimento/checkboxes antigos; nome, e-mail, senha, confirmação com as
    regras da presença; após cadastro → `consentimento.html`; após login → roteamento
    (consentimento pendente? → consentimento; senão → `portal.html`). Atualizar
    `account-auth.test.js`.
-4. [ ] **Consentimento** (`consentimento.html` + `.js`): texto rolável, aceite só no fim.
-5. [ ] **Portal** (`portal.html`, `portal.js`, CSS): layout com menu lateral, guardas de
+4. [x] **Consentimento** (`consentimento.html` + `.js`): texto rolável, aceite só no fim.
+5. [x] **Portal** (`portal.html`, `portal.js`, CSS): layout com menu lateral, guardas de
    rota, sair.
 6. [ ] **Assinatura**: wizard obrigatório no 1º acesso (plano → inscrições →
    envio → pagamento simulado) e modo de gerenciamento depois.
@@ -233,7 +233,6 @@ banca.
 
 ## 9. Pontos em aberto
 
-- Aplicar a migration (aguardando aprovação do time).
 - Confirmação de e-mail no Supabase Auth: se estiver ligada, o cadastro não devolve
   sessão e o fluxo para em "verifique seu e-mail". Para a demo, considerar desligar.
 - Configurar `reset-password.html` como Redirect URL no Supabase Auth.
