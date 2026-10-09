@@ -219,7 +219,7 @@ banca.
 4. [x] **Consentimento** (`consentimento.html` + `.js`): texto rolável, aceite só no fim.
 5. [x] **Portal** (`portal.html`, `portal.js`, CSS): layout com menu lateral, guardas de
    rota, sair.
-6. [ ] **Assinatura**: wizard obrigatório no 1º acesso (plano → inscrições →
+6. [x] **Assinatura**: wizard obrigatório no 1º acesso (plano → inscrições →
    envio → pagamento simulado) e modo de gerenciamento depois.
 7. [ ] **Execuções**: linha do tempo lendo `agent_daily_runs` e `agent_match_results`.
 8. [ ] **Início**: resumo (fatura, inscrições, última/próxima leitura).

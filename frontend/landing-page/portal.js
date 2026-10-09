@@ -96,6 +96,11 @@
     statusEl.hidden = true;
     errorEl.hidden = true;
     app.hidden = false;
+
+    // Avisa as abas (ex.: Assinatura) que o estado de acesso mudou.
+    window.dispatchEvent(new CustomEvent("portal:access", {
+      detail: { guard, session: access.session, perfil: access.perfil, assinatura: access.assinatura }
+    }));
     return guard;
   }
 
