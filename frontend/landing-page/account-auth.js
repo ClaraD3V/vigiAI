@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
   "use strict";
 
   function validatePassword(password) {
@@ -7,9 +7,17 @@
 
   function validateAccountSignup(data) {
     const errors = {};
+    const fullName = String(data?.fullName ?? "").trim();
+    const email = String(data?.email ?? "").trim();
+    const cpf = String(data?.cpf ?? "").replace(/\D/g, "");
+    const birthDate = String(data?.birthDate ?? "").trim();
     const password = String(data?.password ?? "");
     const consent = data?.consent ?? {};
 
+    if (fullName.length < 3) errors.fullName = "Informe seu nome completo.";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.email = "Informe um e-mail válido.";
+    if (cpf.length !== 11) errors.cpf = "Informe um CPF válido.";
+    if (!birthDate) errors.birthDate = "Informe sua data de nascimento.";
     if (!validatePassword(password)) {
       errors.password = "A senha deve ter pelo menos 8 caracteres.";
     }
