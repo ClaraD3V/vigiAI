@@ -221,7 +221,7 @@ banca.
    rota, sair.
 6. [x] **Assinatura**: wizard obrigatório no 1º acesso (plano → inscrições →
    envio → pagamento simulado) e modo de gerenciamento depois.
-7. [ ] **Execuções**: linha do tempo lendo `agent_daily_runs` e `agent_match_results`.
+7. [x] **Execuções**: linha do tempo lendo `agent_daily_runs` e `agent_match_results`.
 8. [ ] **Início**: resumo (fatura, inscrições, última/próxima leitura).
 9. [ ] **Meu perfil**: dados + excluir conta via RPC.
 10. [ ] **Landing**: headline nova, plano de R$ 4,99, Entrar/Criar conta no topo
