@@ -166,20 +166,19 @@ a {
 }
 
 .lp-logo {
-  font: 600 1.7rem/1 var(--serif);
-  letter-spacing: -0.02em;
-  color: var(--ink);
+  display: block;
+  width: 128px;
+  height: 56px;
+  flex: none;
   text-decoration: none;
 }
 
-/* O "AI" do logotipo é o primeiro grifo da página. */
-.lp-logo span {
-  padding: 0.02em 0.14em;
-  margin-left: 0.04em;
-  background: var(--mark);
-  color: var(--mark-ink);
-  border-radius: 2px;
-  font-style: italic;
+.lp-logo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
 .lp-nav {

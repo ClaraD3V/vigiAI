@@ -177,12 +177,11 @@ header.top .wrap {
 }
 
 .logo {
-  font-family: system-ui, sans-serif;
-  font-weight: 700;
-}
-
-.logo span {
-  color: var(--accent);
+  display: block;
+  width: 128px;
+  height: 56px;
+  object-fit: cover;
+  object-position: center;
 }
 
 .site-link {
@@ -774,10 +773,19 @@ input:focus {
 }
 
 .portal-page {
+  --surface: #fffdf8;
+  --soft: #d4ecea;
   background: var(--bg);
   color: var(--ink);
-  font: 400 1rem/1.55 var(--sans);
+  font: 400 1.0625rem/1.6 var(--sans);
   -webkit-font-smoothing: antialiased;
+}
+
+@media (prefers-color-scheme: dark) {
+  .portal-page {
+    --surface: #172034;
+    --soft: #16302f;
+  }
 }
 
 /* Títulos em Newsreader, tudo mais em Instrument Sans, números de inscrição em IBM Plex Mono. */
@@ -786,6 +794,7 @@ input:focus {
 .portal-page h3 {
   font-family: var(--serif);
   font-weight: 500;
+  letter-spacing: 0;
 }
 
 .portal-page button,
@@ -793,20 +802,26 @@ input:focus {
 .portal-page select,
 .portal-page label,
 .portal-page table,
-.portal-page .logo,
 .portal-page .msg,
 .portal-page .note {
   font-family: var(--sans);
 }
 
-.portal-page .logo {
-  font-family: var(--serif);
-  font-size: 1.35rem;
-  font-weight: 600;
-}
-
 .portal-page .mono {
   font-family: var(--mono);
+}
+
+.portal-page .btn {
+  border-radius: 999px;
+  font: 600 1rem/1 var(--sans);
+}
+
+.portal-page input:not([type="checkbox"]):not([type="radio"]),
+.portal-page select,
+.portal-page textarea {
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--sans);
 }
 
 .portal-status,
@@ -841,7 +856,7 @@ input:focus {
   align-items: center;
   gap: 4px 12px;
   padding: 12px 16px 0;
-  background: var(--surface);
+  background: var(--bg);
   border-bottom: 1px solid var(--line);
   position: sticky;
   top: 0;
@@ -867,7 +882,7 @@ input:focus {
   grid-area: logout;
   padding: 8px 12px;
   border: 1.5px solid var(--line);
-  border-radius: 8px;
+  border-radius: 999px;
   background: transparent;
   color: var(--ink);
   font: 0.9rem var(--sans);
@@ -903,6 +918,7 @@ input:focus {
 .portal-nav a[aria-current="page"] {
   color: var(--ink);
   border-bottom-color: var(--accent);
+  background: var(--soft);
 }
 
 .portal-nav a[aria-disabled="true"] {
@@ -923,8 +939,8 @@ input:focus {
 }
 
 .portal-main h1 {
-  margin: 0 0 20px;
-  font-size: clamp(1.75rem, 4vw, 2.1rem);
+  margin: 0 0 24px;
+  font-size: 2rem;
   line-height: 1.15;
 }
 
@@ -1590,6 +1606,21 @@ select {
 
 .home-fact__link {
   font: 600 0.9rem var(--sans);
+}
+
+.portal-page .dashboard-card,
+.portal-page .exe-found,
+.portal-page .exe-possible,
+.portal-page .sub-dialog,
+.portal-page .sub-card,
+.portal-page .home-status--found,
+.portal-page .home-status--possible {
+  border-radius: 8px;
+}
+
+.portal-page .portal-lock,
+.portal-page .home-notice {
+  border-radius: 0 6px 6px 0;
 }
 
 @media (min-width: 800px) {
