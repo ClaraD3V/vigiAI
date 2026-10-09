@@ -57,6 +57,11 @@ resultado, nomeação) — com o que fazer e o prazo.
 - Hoje o banco tem só o schema inicial (`perfis`, `planos`, `assinaturas`,
   `perfis_candidatos`, `monitoramentos`, `canais_notificacao`, ...). Tudo vazio
   exceto 3 planos antigos.
+- **GRANT explícito em toda tabela nova.** O projeto foi criado sem os GRANTs padrão para
+  `anon`/`authenticated`/`service_role`: sem GRANT a consulta falha com "permission denied"
+  antes de o RLS ser avaliado. Toda migration que cria tabela deve trazer, além do RLS, o
+  `grant` para `authenticated` (só o necessário) e para `service_role`. Base:
+  `backend/supabase/migrations/20261009073000_permissoes_api.sql`.
 - **Migration nova, ainda NÃO aplicada:**
   `backend/supabase/migrations/20261009030000_plataforma_portal.sql`. É aditiva (não
   apaga nada). Revisar com o time antes de aplicar. Ela cria:
