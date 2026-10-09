@@ -176,7 +176,9 @@ banca.
 - Leitura: `/edicoes/leitura/mobile/AAAA-MM-DD/{pagina}`
 - Edição analisada: **09/10/2026, nº 9221, 733 páginas**. O texto inteiro sai com
   `pdftotext -layout` em ~4 s.
-  - Págs. 16–660: **Edital nº 149/2026-SEPLA-RH**, convocação para as provas
+  - Págs. 16–25: texto do Edital 149/2026 (instruções). Págs. 26–660: lista de
+    candidatos (635 páginas).
+  - **Edital nº 149/2026-SEPLA-RH**, convocação para as provas
     objetivas do concurso do **Edital nº 74/2026-SEPLA-RH**, provas em
     **18/10/2026**, banca IBAM. Lista em ordem alfabética com inscrição, nome, local
     e sala: **15.289 candidatos**, 23 locais. **2.496 fazem prova na Unisanta,
