@@ -38,6 +38,15 @@ test("números e mensagens combinados para a landing", () => {
   assert.match(html, /account\.html#criar/);
 });
 
+test("os botões de criar conta apontam para a página existente", () => {
+  const signupLinks = [...html.matchAll(/href="([^"]*account\.html#criar)"/g)].map(match => match[1]);
+  assert.ok(signupLinks.length >= 2);
+  for (const link of signupLinks) {
+    const target = path.resolve(path.dirname(path.join(__dirname, "../index.html")), link.split("#")[0]);
+    assert.equal(fs.existsSync(target), true, `destino inexistente: ${link}`);
+  }
+});
+
 // ---------- contraste (WCAG) ----------
 
 function tokens(block) {
