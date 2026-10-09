@@ -77,8 +77,10 @@ export async function createMonitoring(
       usuario_id: userId,
       perfil_candidato_id: perfilCandidatoId,
       url_fonte: urlFonte,
-      nome_fonte: nomeFonte,
+      nome_fonte: nomeFonte ?? null,
       status: "ativo",
+      verificado_em: null,
+      ultima_ocorrencia_em: null,
     })
     .select()
     .single();

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "vigiAI — Monitoramento Inteligente de Publicações e Diários Oficiais",
   "private": true,
+  "packageManager": "yarn@1.22.19",
   "license": "MIT",
   "workspaces": [
     "agent",

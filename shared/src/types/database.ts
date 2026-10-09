@@ -19,6 +19,7 @@ export interface Database {
         };
         Insert: Omit<Database["public"]["Tables"]["perfis"]["Row"], "criado_em" | "atualizado_em">;
         Update: Partial<Database["public"]["Tables"]["perfis"]["Row"]>;
+        Relationships: [];
       };
 
       planos: {
@@ -35,6 +36,7 @@ export interface Database {
         };
         Insert: Omit<Database["public"]["Tables"]["planos"]["Row"], "id" | "criado_em">;
         Update: Partial<Database["public"]["Tables"]["planos"]["Row"]>;
+        Relationships: [];
       };
 
       assinaturas: {
@@ -50,6 +52,7 @@ export interface Database {
         };
         Insert: Omit<Database["public"]["Tables"]["assinaturas"]["Row"], "id" | "criado_em" | "atualizado_em">;
         Update: Partial<Database["public"]["Tables"]["assinaturas"]["Row"]>;
+        Relationships: [];
       };
 
       perfis_candidatos: {
@@ -65,6 +68,7 @@ export interface Database {
         };
         Insert: Omit<Database["public"]["Tables"]["perfis_candidatos"]["Row"], "id" | "criado_em" | "atualizado_em">;
         Update: Partial<Database["public"]["Tables"]["perfis_candidatos"]["Row"]>;
+        Relationships: [];
       };
 
       monitoramentos: {
@@ -82,6 +86,7 @@ export interface Database {
         };
         Insert: Omit<Database["public"]["Tables"]["monitoramentos"]["Row"], "id" | "criado_em" | "atualizado_em">;
         Update: Partial<Database["public"]["Tables"]["monitoramentos"]["Row"]>;
+        Relationships: [];
       };
 
       canais_notificacao: {
@@ -97,6 +102,7 @@ export interface Database {
         };
         Insert: Omit<Database["public"]["Tables"]["canais_notificacao"]["Row"], "id" | "criado_em" | "atualizado_em">;
         Update: Partial<Database["public"]["Tables"]["canais_notificacao"]["Row"]>;
+        Relationships: [];
       };
 
       monitoramentos_canais_notificacao: {
@@ -107,6 +113,7 @@ export interface Database {
         };
         Insert: Omit<Database["public"]["Tables"]["monitoramentos_canais_notificacao"]["Row"], "criado_em">;
         Update: Partial<Database["public"]["Tables"]["monitoramentos_canais_notificacao"]["Row"]>;
+        Relationships: [];
       };
 
       eventos_monitoramento: {
@@ -124,6 +131,7 @@ export interface Database {
         };
         Insert: Omit<Database["public"]["Tables"]["eventos_monitoramento"]["Row"], "id" | "criado_em">;
         Update: Partial<Database["public"]["Tables"]["eventos_monitoramento"]["Row"]>;
+        Relationships: [];
       };
 
       logs_auditoria: {
@@ -138,6 +146,7 @@ export interface Database {
         };
         Insert: Omit<Database["public"]["Tables"]["logs_auditoria"]["Row"], "id" | "criado_em">;
         Update: Partial<Database["public"]["Tables"]["logs_auditoria"]["Row"]>;
+        Relationships: [];
       };
 
       // Agent tables (dashboard leitura)
@@ -154,6 +163,7 @@ export interface Database {
         };
         Insert: Omit<Database["public"]["Tables"]["agent_daily_runs"]["Row"], "id" | "created_at">;
         Update: Partial<Database["public"]["Tables"]["agent_daily_runs"]["Row"]>;
+        Relationships: [];
       };
 
       agent_monitoring_snapshots: {
@@ -171,6 +181,7 @@ export interface Database {
         };
         Insert: Database["public"]["Tables"]["agent_monitoring_snapshots"]["Row"];
         Update: Partial<Database["public"]["Tables"]["agent_monitoring_snapshots"]["Row"]>;
+        Relationships: [];
       };
 
       agent_match_results: {
@@ -190,11 +201,12 @@ export interface Database {
         };
         Insert: Omit<Database["public"]["Tables"]["agent_match_results"]["Row"], "id">;
         Update: Partial<Database["public"]["Tables"]["agent_match_results"]["Row"]>;
+        Relationships: [];
       };
     };
 
-    Views: Record<string, unknown>;
-    Functions: Record<string, unknown>;
+    Views: Record<string, never>;
+    Functions: Record<string, never>;
     Enums: Record<string, unknown>;
     CompositeTypes: Record<string, unknown>;
   };
