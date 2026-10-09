@@ -759,3 +759,205 @@ input:focus {
     padding: 32px 0;
   }
 }
+
+/* ---------- Portal (portal.html) ---------- */
+
+.portal [hidden],
+.portal-page [hidden] {
+  display: none !important;
+}
+
+.portal-page {
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.portal-status,
+.portal-error {
+  max-width: 420px;
+  margin: 20vh auto 0;
+  padding: 0 16px;
+  text-align: center;
+  font: 1rem system-ui;
+  color: var(--muted);
+}
+
+.portal-error .btn {
+  margin-top: 8px;
+}
+
+.portal {
+  display: grid;
+  grid-template-columns: 1fr;
+  min-height: 100vh;
+}
+
+/* Celular: marca + Sair na linha de cima, nome embaixo, abas na última linha. */
+.portal-side {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    "brand logout"
+    "user  user"
+    "nav   nav";
+  align-items: center;
+  gap: 4px 12px;
+  padding: 12px 16px 0;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+.portal-brand {
+  grid-area: brand;
+}
+
+.portal-user {
+  grid-area: user;
+  margin: 0;
+  font: 0.88rem system-ui;
+  color: var(--muted);
+}
+
+.portal-user:not(:empty)::before {
+  content: "Olá, ";
+}
+
+.portal-logout {
+  grid-area: logout;
+  padding: 8px 12px;
+  border: 1.5px solid var(--line);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ink);
+  font: 0.9rem system-ui;
+  cursor: pointer;
+}
+
+.portal-logout:hover {
+  border-color: var(--accent);
+}
+
+.portal-nav {
+  grid-area: nav;
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  margin: 0 -16px;
+  padding: 0 16px;
+}
+
+.portal-nav a {
+  flex: none;
+  padding: 10px 12px;
+  border-bottom: 3px solid transparent;
+  color: var(--muted);
+  font: 600 0.92rem system-ui;
+  text-decoration: none;
+}
+
+.portal-nav a:hover {
+  color: var(--ink);
+}
+
+.portal-nav a[aria-current="page"] {
+  color: var(--ink);
+  border-bottom-color: var(--accent);
+}
+
+.portal-nav a[aria-disabled="true"] {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.portal-logout:focus-visible,
+.portal-nav a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.portal-main {
+  padding: 24px 16px 48px;
+  max-width: 880px;
+  width: 100%;
+}
+
+.portal-main h1 {
+  margin: 0 0 12px;
+  font-size: 1.6rem;
+}
+
+.portal-lock {
+  margin: 0 0 20px;
+  padding: 12px 14px;
+  border-left: 4px solid var(--warn);
+  background: var(--surface);
+  font: 0.92rem system-ui;
+}
+
+.portal-empty {
+  margin: 0;
+  padding: 28px 0;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font: 0.95rem/1.5 system-ui;
+}
+
+/* Desktop: menu lateral fixo à esquerda, Sair no rodapé do menu. */
+@media (min-width: 800px) {
+  .portal {
+    grid-template-columns: 240px 1fr;
+  }
+
+  .portal-side {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr auto;
+    grid-template-areas:
+      "brand"
+      "user"
+      "nav"
+      "logout";
+    align-items: start;
+    gap: 6px;
+    padding: 24px 16px 20px;
+    border-bottom: 0;
+    border-right: 1px solid var(--line);
+  }
+
+  .portal-user {
+    margin-bottom: 16px;
+  }
+
+  .portal-nav {
+    flex-direction: column;
+    overflow: visible;
+    margin: 0;
+    padding: 0;
+  }
+
+  .portal-nav a {
+    padding: 10px 12px;
+    border-bottom: 0;
+    border-left: 3px solid transparent;
+    border-radius: 0 8px 8px 0;
+  }
+
+  .portal-nav a[aria-current="page"] {
+    border-left-color: var(--accent);
+    background: var(--soft);
+  }
+
+  .portal-logout {
+    width: 100%;
+    text-align: left;
+  }
+
+  .portal-main {
+    padding: 40px 48px 64px;
+  }
+}

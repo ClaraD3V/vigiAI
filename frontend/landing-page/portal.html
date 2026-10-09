@@ -6,27 +6,57 @@
 <title>Portal | vigiAI</title>
 <link rel="stylesheet" href="styles.css">
 </head>
-<body class="auth-page">
-<!-- PROVISÓRIO: substituído pelo portal real na tarefa 5 do CLAUDE.md. -->
-<header class="top"><div class="wrap"><div class="logo">📄 vigi<span>AI</span></div><button class="btn site-link ghost" id="logoutButton" type="button">Sair</button></div></header>
-<main class="auth-main">
-  <section class="wrap consent-shell">
-    <div class="auth-card">
-      <h2>Portal em construção</h2>
-      <p class="muted">Sua conta está pronta. Esta área será liberada em breve.</p>
-    </div>
-  </section>
-</main>
+<body class="portal-page">
+
+<p class="portal-status" id="portalStatus" role="status">Carregando…</p>
+
+<div class="portal-error" id="portalError" role="alert" hidden>
+  <p>Não foi possível carregar sua conta. Verifique a conexão e tente de novo.</p>
+  <button class="btn" id="portalRetry" type="button">Tentar de novo</button>
+</div>
+
+<div class="portal" id="portalApp" hidden>
+  <aside class="portal-side">
+    <div class="portal-brand logo">vigi<span>AI</span></div>
+    <p class="portal-user" id="portalUser"></p>
+    <nav class="portal-nav" aria-label="Portal">
+      <a href="#inicio" data-tab="inicio">Início</a>
+      <a href="#execucoes" data-tab="execucoes">Execuções</a>
+      <a href="#assinatura" data-tab="assinatura">Assinatura</a>
+      <a href="#perfil" data-tab="perfil">Meu perfil</a>
+    </nav>
+    <button class="portal-logout" id="logoutButton" type="button">Sair</button>
+  </aside>
+
+  <main class="portal-main">
+    <p class="portal-lock" id="portalLock" hidden>Para usar o vigiAI, conclua a assinatura. As outras áreas são liberadas em seguida.</p>
+
+    <section class="portal-section" id="tab-inicio" data-section="inicio" hidden>
+      <h1>Início</h1>
+      <p class="portal-empty">Aqui você verá o resumo da sua fatura, das inscrições vigiadas e da última leitura do Diário Oficial.</p>
+    </section>
+
+    <section class="portal-section" id="tab-execucoes" data-section="execucoes" hidden>
+      <h1>Execuções</h1>
+      <p class="portal-empty">Cada noite em que o agente ler o Diário Oficial aparecerá aqui, com o resultado.</p>
+    </section>
+
+    <section class="portal-section" id="tab-assinatura" data-section="assinatura" hidden>
+      <h1>Assinatura</h1>
+      <p class="portal-empty">Plano, inscrições, forma de envio e pagamento ficarão nesta área.</p>
+    </section>
+
+    <section class="portal-section" id="tab-perfil" data-section="perfil" hidden>
+      <h1>Meu perfil</h1>
+      <p class="portal-empty">Seus dados e a opção de excluir a conta ficarão aqui.</p>
+    </section>
+  </main>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-env.js"></script>
 <script src="supabase-config.js"></script>
-<script>
-  document.querySelector("#logoutButton").addEventListener("click", async () => {
-    const client = globalThis.vigiAISupabase && globalThis.vigiAISupabase.client;
-    if (client) await client.auth.signOut();
-    window.location.assign("account.html");
-  });
-</script>
+<script src="portal-logic.js"></script>
+<script src="portal.js"></script>
 </body>
 </html>
