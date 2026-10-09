@@ -7,6 +7,10 @@ const run = (id, day, extra = {}) => ({
   id,
   run_at: `2026-10-${day}T03:05:07.000Z`,
   finished_at: `2026-10-${day}T03:08:07.000Z`,
+  created_at: `2026-10-${day}T03:05:08.000Z`,
+  cities_synced: 3,
+  monitorings_checked: 2,
+  matches_found: 1,
   errors: 0,
   ...extra
 });
@@ -98,14 +102,36 @@ test("resumo no ponto de vista do usuário", () => {
 
 test("linha do tempo: mais recente primeiro, resumo e aviso de falha", () => {
   const timeline = E.buildTimeline({
-    runs: [run(1, "07"), run(3, "09"), run(2, "08", { errors: 2 })],
+    runs: [run(1, "07"), run(3, "09"), run(2, "08", { errors: 2 }), run(4, "06", { finished_at: null })],
     matches: [],
     inscricoes
   });
-  assert.deepEqual(timeline.map(item => item.key), ["run-3", "run-2", "run-1"]);
+  assert.deepEqual(timeline.map(item => item.key), ["run-3", "run-1"]);
   assert.equal(timeline[0].dateLabel, "09/10 às 00h05");
   assert.equal(timeline[0].summary, "Diário lido. Suas 2 inscrições foram verificadas. Não foi dessa vez.");
-  assert.deepEqual(timeline.map(item => item.hadErrors), [false, true, false]);
+  assert.deepEqual(timeline.map(item => item.hadErrors), [false, false]);
+});
+
+test("inclui métricas apenas dos logs finalizados com sucesso", () => {
+  const timeline = E.buildTimeline({
+    runs: [run(1, "09"), run(2, "08", { errors: 2 }), run(3, "07", { finished_at: null })]
+  });
+
+  assert.equal(timeline.length, 1);
+  assert.equal(timeline[0].log.statusLabel, "Finalizada com sucesso");
+  assert.deepEqual(timeline[0].log, {
+    id: 1,
+    statusCode: "complete",
+    statusLabel: "Finalizada com sucesso",
+    startedAt: "09/10 às 00h05",
+    finishedAt: "09/10 às 00h08",
+    createdAt: "09/10 às 00h05",
+    citiesSynced: 3,
+    monitoringsChecked: 2,
+    matchesFound: 1,
+    errors: 0
+  });
+  assert.equal(timeline[0].log.errors, 0);
 });
 
 test("achado entra na leitura certa, com número da inscrição e dados do card", () => {

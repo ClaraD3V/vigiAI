@@ -15,8 +15,9 @@
   async function fetchRuns(offset) {
     // Pede uma linha a mais para saber se existe página seguinte.
     const { data, error } = await client.from("agent_daily_runs")
-      .select("id, run_at, finished_at, errors")
-      .gte("run_at", ctx.since)
+      .select("id, run_at, finished_at, cities_synced, monitorings_checked, matches_found, errors, created_at")
+      .not("finished_at", "is", null)
+      .eq("errors", 0)
       .order("run_at", { ascending: false })
       .range(offset, offset + PAGE);
     if (error) throw error;
@@ -88,6 +89,26 @@
         : null);
   }
 
+  function runLog(log) {
+    const fields = [
+      ["Início", log.startedAt],
+      ["Término", log.finishedAt || "Em andamento"],
+      ["Cidades sincronizadas", String(log.citiesSynced)],
+      ["Monitoramentos verificados", String(log.monitoringsChecked)],
+      ["Correspondências", String(log.matchesFound)],
+      ["Erros", String(log.errors)]
+    ];
+    if (log.createdAt) fields.push(["Registro criado", log.createdAt]);
+
+    return h("section", { class: "exe-log", "aria-label": `Log da execução ${log.id}` },
+      h("div", { class: "exe-log__head" },
+        h("h3", { text: `Execução #${log.id}` }),
+        h("span", { class: `exe-log__status exe-log__status--${log.statusCode}`, text: log.statusLabel })),
+      h("dl", { class: "exe-log__details" },
+        fields.map(([label, value]) => h("div", { class: "exe-log__field" },
+          h("dt", { text: label }), h("dd", { text: value })) )));
+  }
+
   function entryNode(entry) {
     return h("li", { class: `exe-item${entry.found.length ? " has-found" : ""}` },
       h("div", { class: "exe-when", text: entry.dateLabel }),
@@ -96,6 +117,7 @@
         entry.hadErrors
           ? h("p", { class: "exe-warn", text: "Parte do Diário não pôde ser lida nesta noite. Vamos tentar de novo na próxima leitura." })
           : null,
+        entry.log ? runLog(entry.log) : null,
         entry.found.map(foundCard),
         entry.possible.map(possibleCard)));
   }

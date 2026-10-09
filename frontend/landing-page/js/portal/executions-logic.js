@@ -135,19 +135,35 @@
   // some: se a leitura dele não foi registrada, ele ganha uma entrada própria.
   function buildTimeline({ runs = [], matches = [], inscricoes = [], hasMore = false } = {}) {
     const numeroById = new Map(inscricoes.map(item => [item.id, item.numero_inscricao]));
-    const sortedRuns = [...runs].sort((a, b) => new Date(b.run_at) - new Date(a.run_at));
+    const sortedRuns = runs
+      .filter(run => run.finished_at && Number(run.errors) === 0)
+      .sort((a, b) => new Date(b.run_at) - new Date(a.run_at));
     const oldestRunAt = sortedRuns.length ? new Date(sortedRuns[sortedRuns.length - 1].run_at).getTime() : null;
 
-    const entries = new Map(sortedRuns.map(run => [run.id, {
-      key: `run-${run.id}`,
-      kind: "run",
-      at: run.run_at,
-      dateLabel: formatRunDate(run.run_at),
-      checked: countCheckedInscricoes(inscricoes, run.run_at),
-      hadErrors: Number(run.errors) > 0,
-      found: [],
-      possible: []
-    }]));
+    const entries = new Map(sortedRuns.map(run => {
+      return [run.id, {
+        key: `run-${run.id}`,
+        kind: "run",
+        at: run.run_at,
+        dateLabel: formatRunDate(run.run_at),
+        checked: countCheckedInscricoes(inscricoes, run.run_at),
+        hadErrors: false,
+        log: {
+          id: run.id,
+          statusCode: "complete",
+          statusLabel: "Finalizada com sucesso",
+          startedAt: formatRunDate(run.run_at),
+          finishedAt: run.finished_at ? formatRunDate(run.finished_at) : null,
+          createdAt: run.created_at ? formatRunDate(run.created_at) : null,
+          citiesSynced: Number(run.cities_synced) || 0,
+          monitoringsChecked: Number(run.monitorings_checked) || 0,
+          matchesFound: Number(run.matches_found) || 0,
+          errors: 0
+        },
+        found: [],
+        possible: []
+      }];
+    }));
     const orphans = new Map();
 
     matches.forEach(match => {
