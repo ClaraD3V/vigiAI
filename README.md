@@ -125,8 +125,8 @@ npm run test          # Roda os testes (node --test)
 
 ### Frontend (Vercel)
 ```bash
-# Site estático, sem build. Root Directory do projeto: frontend
-# frontend/vercel.json aponta outputDirectory para landing-page
+# Site estático, sem build. Root Directory do projeto: frontend/landing-page
+# frontend/landing-page/vercel.json desativa build/install e serve o próprio diretório
 ```
 
 ### Backend (Railway / Fly.io)
