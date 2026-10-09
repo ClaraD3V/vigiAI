@@ -11,6 +11,7 @@ require("dotenv").config();
 const { chromium } = require("playwright");
 const { extractTextWithTesseract, findUserInText } = require("./src/llm/tesseractOcr.cjs");
 const { sendEmail } = require("./src/notifications/email.cjs");
+const { sendWhatsApp } = require("./src/notifications/whatsapp.cjs");
 
 const config = {
   searchCity: "Santos",
@@ -19,37 +20,108 @@ const config = {
   // searchNumber: "11254",
   // searchName: "MARINA DE JESUS SOARES",
   baseUrl: "https://www.ibamsp-concursos.org.br",
+  whatsappNumber: process.env.WHATSAPP_PHONE,
 };
 
 let browser;
 
-console.log(`\n${"=".repeat(70)}`);
-console.log(`🤖 AGENTE vigiAI v2 - Buscando ${config.searchNumber} ${config.searchName}`);
-console.log(`${"=".repeat(70)}\n`);
+// ============================================================
+// SISTEMA DE LOGS ESTRUTURADO
+// ============================================================
+
+class Logger {
+  constructor() {
+    this.startTime = Date.now();
+  }
+
+  header() {
+    console.log("\n" + "═".repeat(70));
+    console.log(`🤖 vigiAI Agent v2 | Busca Inteligente`);
+    console.log(`   Target: ${config.searchName} (${config.searchNumber})`);
+    console.log(`   Cidade: ${config.searchCity}`);
+    console.log("═".repeat(70) + "\n");
+  }
+
+  phase(number, name) {
+    const elapsed = this.elapsed();
+    console.log(`\n[${elapsed}] ⏳ FASE ${number}: ${name}`);
+    console.log("─".repeat(70));
+  }
+
+  step(text, status = "info") {
+    const icons = {
+      info: "   └─",
+      loading: "   ⏳",
+      success: "   ✅",
+      error: "   ❌",
+      warning: "   ⚠️ ",
+    };
+    console.log(`${icons[status]} ${text}`);
+  }
+
+  result(title, value) {
+    console.log(`   📊 ${title}: ${value}`);
+  }
+
+  success(text) {
+    const elapsed = this.elapsed();
+    console.log(`\n[${elapsed}] ✅ ${text}`);
+  }
+
+  error(text) {
+    const elapsed = this.elapsed();
+    console.log(`\n[${elapsed}] ❌ ${text}`);
+  }
+
+  section(text) {
+    console.log(`\n📋 ${text}`);
+  }
+
+  elapsed() {
+    const ms = Date.now() - this.startTime;
+    const sec = Math.floor(ms / 1000);
+    const min = Math.floor(sec / 60);
+    const s = sec % 60;
+    return `${String(min).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+  }
+
+  separator() {
+    console.log("═".repeat(70));
+  }
+
+  jsonData(data) {
+    console.log(JSON.stringify(data, null, 2));
+  }
+}
+
+const log = new Logger();
+log.header();
 
 // ============================================================
 // FASE 1: Navegação Inteligente
 // ============================================================
 
 async function phase1Navigation() {
-  console.log("📱 FASE 1: Navegação Inteligente\n");
+  log.phase(1, "Navegação Inteligente");
 
   try {
+    log.step("Iniciando navegador Chromium...", "loading");
     browser = await chromium.launch({ headless: true });
     const page = await browser.newPage();
+    log.step("Navegador iniciado", "success");
 
-    console.log(`🔗 Acessando ${config.baseUrl}/index/todos/`);
+    log.step(`Acessando ${config.baseUrl}/index/todos/`, "loading");
     await page.goto(`${config.baseUrl}/index/todos/`, { waitUntil: "networkidle" });
+    log.step("Página carregada", "success");
 
-    // Procurar e preencher busca
-    console.log(`🔍 Buscando por: ${config.searchCity}`);
+    log.step(`Filtrando por cidade: ${config.searchCity}`, "loading");
     const searchUrl = `${config.baseUrl}/index/todos/?busca=${encodeURIComponent(
       config.searchCity
     )}`;
     await page.goto(searchUrl, { waitUntil: "networkidle" });
+    log.step("Filtro aplicado", "success");
 
-    // Extrair editais
-    console.log("📋 Extraindo lista de editais...");
+    log.step("Extraindo lista de editais...", "loading");
     const editais = await page.evaluate(() => {
       const items = [];
       document.querySelectorAll("h3 a").forEach((link) => {
@@ -65,10 +137,10 @@ async function phase1Navigation() {
       return items;
     });
 
-    console.log(`✅ Encontrados ${editais.length} editais\n`);
+    log.result("Editais encontrados", editais.length);
     return { page, editais };
   } catch (error) {
-    console.error("❌ Erro Fase 1:", error.message);
+    log.error(`Erro na Fase 1: ${error.message}`);
     throw error;
   }
 }
@@ -77,13 +149,13 @@ async function phase1Navigation() {
 // FASE 2: Identificar Documento com LLM
 // ============================================================
 
-async function phase2IdentifyDocument(page, editalId, editalTitle) {
+async function phase2IdentifyDocument(page, editalId, editalTitle, current, total) {
   try {
-    // Acessar página do edital
+    log.step(`[${current}/${total}] ${editalTitle}`, "loading");
+
     const editalUrl = `${config.baseUrl}/informacoes/${editalId}/`;
     await page.goto(editalUrl, { waitUntil: "networkidle" });
 
-    // Extrair documentos
     const docs = await page.evaluate(() => {
       const items = [];
       document.querySelectorAll("a[data-astv]").forEach((link) => {
@@ -97,18 +169,15 @@ async function phase2IdentifyDocument(page, editalId, editalTitle) {
     });
 
     if (!docs.length) {
-      console.log(`  ⚠️ Nenhum PDF encontrado`);
+      log.step("Nenhum PDF encontrado", "warning");
       return null;
     }
 
-    console.log(`  📄 ${docs.length} documentos encontrados`);
-
-    // Usar LLM para identificar classificação final
+    log.result("PDFs identificados", docs.length);
     const classificationDoc = await identifyWithLLM(docs, editalTitle);
-
     return classificationDoc;
   } catch (error) {
-    console.error(`  ❌ Erro ao processar edital ${editalId}:`, error.message);
+    log.step(`Erro ao processar edital: ${error.message}`, "error");
     return null;
   }
 }
@@ -116,10 +185,8 @@ async function phase2IdentifyDocument(page, editalId, editalTitle) {
 async function identifyWithLLM(docs, editalTitle) {
   const apiKey = process.env.OPENROUTER_API_KEY;
 
-  // Fallback: sem chave, usar regex
   if (!apiKey || apiKey.trim() === "") {
-    console.log("  Sem LLM, procurando por Classificacao Final...");
-    // APENAS classificação final, nunca isenção/recurso
+    log.step("LLM não configurado, usando regex", "warning");
     const keywords = ["classificação final", "divulgação de classificação"];
     for (const keyword of keywords) {
       const found = docs.find((d) => {
@@ -127,16 +194,16 @@ async function identifyWithLLM(docs, editalTitle) {
         return lower.includes(keyword) && !lower.includes("isenção");
       });
       if (found) {
-        console.log(`  ✓ Encontrado: ${found.label}`);
+        log.step(`Encontrado (regex): ${found.label}`, "success");
         return found;
       }
     }
-    console.log("  Nenhum documento de Classificacao Final encontrado");
+    log.step("Nenhum documento de classificação encontrado", "warning");
     return null;
   }
 
   try {
-    console.log("  🤖 Usando LLM para identificar...");
+    log.step("Analisando com LLM...", "loading");
 
     const prompt = `Análise de edital: ${editalTitle}
 
@@ -163,7 +230,6 @@ Responda APENAS com o nome exato ou "NENHUM".`;
     });
 
     if (!response.ok) {
-      // Fallback para regex
       const keywords = ["classificação final", "divulgação de classificação"];
       for (const keyword of keywords) {
         const found = docs.find((d) => {
@@ -171,7 +237,7 @@ Responda APENAS com o nome exato ou "NENHUM".`;
           return lower.includes(keyword) && !lower.includes("isenção");
         });
         if (found) {
-          console.log(`  ✓ Encontrado: ${found.label}`);
+          log.step(`Encontrado (fallback): ${found.label}`, "success");
           return found;
         }
       }
@@ -182,7 +248,7 @@ Responda APENAS com o nome exato ou "NENHUM".`;
     const answer = data.choices?.[0]?.message?.content?.trim() || "";
 
     if (answer === "NENHUM") {
-      console.log("  ❌ LLM: nenhum documento de classificação");
+      log.step("LLM: nenhum documento de classificação", "warning");
       return null;
     }
 
@@ -190,23 +256,21 @@ Responda APENAS com o nome exato ou "NENHUM".`;
       d.label.toLowerCase().includes(answer.toLowerCase())
     );
     if (found) {
-      console.log(`  ✓ LLM identificou: ${found.label}`);
+      log.step(`LLM identificou: ${found.label}`, "success");
       return found;
     }
 
-    // Fallback se LLM respondeu algo estranho
     const partial = docs.find((d) =>
       d.label.toLowerCase().includes("classificação")
     );
     if (partial) {
-      console.log(`  ✓ Match parcial: ${partial.label}`);
+      log.step(`Match parcial: ${partial.label}`, "success");
       return partial;
     }
 
     return null;
   } catch (error) {
-    console.error("  ⚠️ Erro LLM:", error.message);
-    // Fallback para regex
+    log.step(`Erro LLM: ${error.message}`, "warning");
     const keywords = [
       "classificação final",
       "divulgação de classificação",
@@ -217,7 +281,7 @@ Responda APENAS com o nome exato ou "NENHUM".`;
         d.label.toLowerCase().includes(keyword)
       );
       if (found) {
-        console.log(`  ✓ Fallback (erro): ${found.label}`);
+        log.step(`Encontrado (fallback): ${found.label}`, "success");
         return found;
       }
     }
@@ -230,20 +294,27 @@ Responda APENAS com o nome exato ou "NENHUM".`;
 // ============================================================
 
 async function phase3ExtractWithOCR(pdfUrl, editalTitle) {
-  console.log(`  👁️ FASE 3: OCR com Tesseract (gratuito)\n`);
+  log.phase(3, "Extração de Texto com OCR (Tesseract.js)");
 
-  // Extrair texto do PDF
-  const text = await extractTextWithTesseract(pdfUrl, 10);
+  try {
+    log.step("Processando PDF...", "loading");
+    const text = await extractTextWithTesseract(pdfUrl, 10);
 
-  if (!text || text.trim().length === 0) {
-    console.log("    ⚠️ Nenhum texto extraível");
+    if (!text || text.trim().length === 0) {
+      log.step("Nenhum texto extraível do PDF", "warning");
+      return null;
+    }
+
+    log.result("Linhas de texto extraídas", text.split("\n").length);
+
+    log.step(`Procurando por: ${config.searchName}`, "loading");
+    const result = await findUserInText(text, config.searchNumber, config.searchName);
+
+    return result;
+  } catch (error) {
+    log.error(`Erro na Fase 3: ${error.message}`);
     return null;
   }
-
-  // Procurar pelo usuário
-  const result = await findUserInText(text, config.searchNumber, config.searchName);
-
-  return result;
 }
 
 // ============================================================
@@ -251,26 +322,38 @@ async function phase3ExtractWithOCR(pdfUrl, editalTitle) {
 // ============================================================
 
 async function phase4NotifyAndStore(foundUser) {
-  console.log(`\n📧 FASE 4: Notificação por Email\n`);
+  log.phase(4, "Notificação e Cadastro");
 
-  // Email
-  console.log(`📧 Enviando email...`);
-  const subject = `✅ Aprovado no Edital - Inscrição ${foundUser.numero_inscricao}`;
-  const message = `Olá ${foundUser.nome},\n\n` +
-    `Você foi APROVADO no edital!\n\n` +
-    `📋 Inscrição: ${foundUser.numero_inscricao}\n` +
-    `🎯 Nome: ${foundUser.nome}\n` +
-    `📄 Edital: ${foundUser.editalTitle}\n\n` +
-    `Documento: ${foundUser.documentUrl}\n\n` +
-    `Confira os detalhes no portal do IBAMSP.`;
+  try {
+    const subject = `✅ Aprovado no Edital - Inscrição ${foundUser.numero_inscricao}`;
+    const emailMessage = `Olá ${foundUser.nome},\n\n` +
+      `Você foi APROVADO no edital!\n\n` +
+      `📋 Inscrição: ${foundUser.numero_inscricao}\n` +
+      `🎯 Nome: ${foundUser.nome}\n` +
+      `📄 Edital: ${foundUser.editalTitle}\n\n` +
+      `Documento: ${foundUser.documentUrl}\n\n` +
+      `Confira os detalhes no portal do IBAMSP.`;
 
-  await sendEmail("rianvinicius9@gmail.com", subject, message);
-  console.log("✅ Email enviado");
+    log.step("Enviando email...", "loading");
+    await sendEmail("rianvinicius9@gmail.com", subject, emailMessage);
+    log.step("Email enviado", "success");
 
-  // Banco de dados (estrutura)
-  console.log(`\n💾 Dados prontos para Supabase:`);
-  console.log(JSON.stringify(
-    {
+    if (config.whatsappNumber) {
+      log.step("Enviando WhatsApp...", "loading");
+      const whatsappMessage = `Olá ${foundUser.nome}! 🎉\n\n` +
+        `Você foi encontrado no edital!\n\n` +
+        `📋 Inscrição: ${foundUser.numero_inscricao}\n` +
+        `📄 Edital: ${foundUser.editalTitle}\n\n` +
+        `Confira: ${foundUser.documentUrl}`;
+
+      await sendWhatsApp(config.whatsappNumber, whatsappMessage);
+      log.step("WhatsApp enviado", "success");
+    } else {
+      log.step("WhatsApp não configurado (WHATSAPP_PHONE)", "warning");
+    }
+
+    log.section("Dados para Supabase");
+    const dbData = {
       fullName: foundUser.nome,
       registrationNumber: foundUser.numero_inscricao,
       city: config.searchCity,
@@ -281,10 +364,13 @@ async function phase4NotifyAndStore(foundUser) {
         documentUrl: foundUser.documentUrl,
       },
       discoveredAt: new Date().toISOString(),
-    },
-    null,
-    2
-  ));
+    };
+    log.jsonData(dbData);
+    log.step("Pronto para cadastro no banco de dados", "success");
+  } catch (error) {
+    log.error(`Erro na Fase 4: ${error.message}`);
+    throw error;
+  }
 }
 
 // ============================================================
@@ -296,19 +382,25 @@ async function main() {
     // Fase 1
     const { page, editais } = await phase1Navigation();
 
+    log.phase(2, "Análise Inteligente com LLM");
+
     let foundUser = null;
+    let processados = 0;
 
     // Loop por editais
-    for (const edital of editais) {
-      // Processa TODOS os editais, não só 5
-      console.log(`\n🔎 Edital ${edital.id}: ${edital.title}`);
+    for (let i = 0; i < editais.length; i++) {
+      const edital = editais[i];
 
       // Fase 2
       const classificationDoc = await phase2IdentifyDocument(
         page,
         edital.id,
-        edital.title
+        edital.title,
+        i + 1,
+        editais.length
       );
+
+      processados++;
 
       if (!classificationDoc) continue;
 
@@ -328,28 +420,31 @@ async function main() {
       }
     }
 
-    // Resultados
-    console.log("\n" + "=".repeat(70));
+    log.result("Editais processados", processados);
+
+    // Resultados finais
+    console.log("\n" + "═".repeat(70));
     if (foundUser) {
-      console.log("✅ USUÁRIO ENCONTRADO!");
-      console.log(JSON.stringify(foundUser, null, 2));
+      log.success("USUÁRIO ENCONTRADO!");
+      log.section("Dados do Candidato");
+      log.jsonData(foundUser);
 
       // Fase 4
       await phase4NotifyAndStore(foundUser);
     } else {
-      console.log("❌ Usuário não encontrado nos editais processados");
-      console.log("\n💡 Próximas ações:");
-      console.log("  1. Verificar se PDFs têm texto extraível");
-      console.log("  2. Aumentar número de editais verificados");
-      console.log("  3. Configurar OPENROUTER_API_KEY para melhorar");
+      log.error("Usuário não encontrado nos editais processados");
+      log.section("Próximas Ações");
+      log.step("Verificar se PDFs têm texto extraível", "info");
+      log.step("Aumentar número de editais verificados", "info");
+      log.step("Configurar OPENROUTER_API_KEY para melhorar precisão", "info");
     }
-    console.log("=".repeat(70) + "\n");
+    log.separator();
 
     // Cleanup
     await page.close();
     await browser.close();
   } catch (error) {
-    console.error("\n❌ Erro fatal:", error.message);
+    log.error(`Erro fatal: ${error.message}`);
     if (browser) await browser.close();
     process.exit(1);
   }
