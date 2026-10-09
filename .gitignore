@@ -9,10 +9,11 @@ dist/
 build/
 
 # IDE
-.vscode/settings.json
+.vscode/
 .idea/
 *.swp
 *.swo
+*.sublime-workspace
 
 # OS
 .DS_Store
@@ -26,3 +27,8 @@ npm-debug.log*
 .turbo/
 .next/
 .vercel
+
+# Agent specific
+data/
+baileys_auth/
+*.cache
